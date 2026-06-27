@@ -66,3 +66,7 @@ main {
 svg .emoji {
     font-size: 50px;
 }
+
+svg .margin-line:hover {
+    stroke: red;
+}
