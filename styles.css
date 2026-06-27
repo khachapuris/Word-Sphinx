@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Cinzel&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+
+* {
+    font-family: 'Inter';
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+h1 {
+    font-family: 'Cinzel';
+    font-size: 32px;
+}
+
+header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+}
+
+aside {
+    width: clamp(200px, 30%, 400px);
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    height: calc(100% - 60px);
+    float: left;
+}
+
+label {
+    display: block;
+    padding-bottom: 5px;
+}
+
+.clr-field button {
+    width: 100% !important;
+}
+
+input[data-coloris] {
+    width: 60px;
+    height: 50px;
+}
+
+main {
+    width: clamp(calc(100% - 400px), 70%, calc(100% - 200px));
+    float: right;
+    padding: calc(50vh - 357px) clamp(10px, calc(35vw - 210px), 200px);
+}
+
+#current-page {
+    border: 1px solid #ddd;
+    width: 422px;
+    height: 596px;
+}
+
+#current-page svg {
+    width: 420px;
+    height: 594px;
+}
+
+svg .emoji {
+    font-size: 50px;
+}

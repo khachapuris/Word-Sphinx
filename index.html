@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Puzzle book generator</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css">
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to the online puzzle book generator!</h1>
+    </header>
+
+    <aside>
+      <label for="bg-color">Change the background color</label>
+      <input
+        name="bg-color"
+        id="bg-color"
+        type="text"
+        value="#ddeeff"
+        data-coloris>
+    </aside>
+
+    <main>
+      <div id="current-page">
+        <svg width="420" height="594" xmlns="http://www.w3.org/2000/svg">
+          <line
+            stroke-dasharray="2, 2"
+            x1="0" y1="50.8" x2="420" y2="50.8"
+            stroke="#8888ff"
+            shape-rendering="crispEdges"></line>
+          <line
+            stroke-dasharray="2, 2"
+            x1="38" y1="0" x2="38" y2="594"
+            stroke="#8888ff"
+            shape-rendering="crispEdges"></line>
+          <line
+            stroke-dasharray="2, 2"
+            x1="382" y1="0" x2="382" y2="594"
+            stroke="#8888ff"
+            shape-rendering="crispEdges"></line>
+          <line
+            stroke-dasharray="2, 2"
+            x1="0" y1="556" x2="420" y2="556"
+            stroke="#8888ff"
+            shape-rendering="crispEdges"></line>
+          <text
+            x="65" y="220"
+            class="emoji">
+            &#128049;
+          </text>
+          <circle
+            cx="180" cy="200" r="30"
+            stroke="black"
+            stroke-width="2"
+            fill="white"></circle>
+          <circle
+            cx="250" cy="200" r="30"
+            stroke="black"
+            stroke-width="2"
+            fill="white"></circle>
+          <circle
+            cx="320" cy="200" r="30"
+            stroke="black"
+            stroke-width="2"
+            fill="white"></circle>
+        </svg>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
