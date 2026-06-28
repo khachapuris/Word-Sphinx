@@ -48,8 +48,13 @@ input[data-coloris] {
 
 main {
     width: clamp(calc(100% - 400px), 70%, calc(100% - 200px));
+    height: calc(100% - 60px);
     float: right;
-    padding: calc(50vh - 357px) clamp(10px, calc(35vw - 210px), 200px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* padding: calc(50vh - 357px) clamp(10px, calc(35vw - 210px), 200px); */
+    padding: 0 clamp(10px, calc(35vw - 210px), 200px);
 }
 
 #current-page {
