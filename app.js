@@ -8,20 +8,22 @@ let marginTop = 25.4;
 let marginInside = 19;
 let marginOutside = 19;
 let marginBottom = 19;
-let gapVertical = 20; // gap between rows of circles
-let gapHorizontal = 4; // gap between columns of circles
-let pictureGap = 10; // gap between the picture and the circles
 let paddingHorizontal = 15;
-let paddingTop = 30;
-let paddingBottom = 20;
-// These values are countable numbers
-let wordLength = 3;
-let wordNumber = 4;
+let paddingTop = 20;
+let paddingBottom = 30;
 // These values depend on page orientation
 let marginRight = marginOutside;
 let marginLeft = marginInside;
+// These values are dimensionless ratios of various elements to the circle size
+let gapVertical = 0.60; // gap between rows of circles
+let gapHorizontal = 0.15; // gap between columns of circles
+let gapPicture = 0.30; // gap between the picture and the circles
+let pictureScale = 0.80;
+let strokeThickness = 0.035;
+// These values are countable numbers
+let wordLength = 3;
+let wordNumber = 4;
 // Miscellaneous
-const pictureScale = 5 / 6; // mm
 
 /* Transform a number into a string that ends with 'px' */
 function appendPx(n) {
@@ -75,12 +77,12 @@ function updatePuzzleGeometry() {
         - marginBottom
         - paddingTop
         - paddingBottom;
-    const circleHeight = (
-        availableHeight - gapVertical * (wordNumber - 1)
-    ) / wordNumber;
-    const circleWidth = (
-        availableWidth - gapHorizontal * (wordLength - 1) - pictureGap
-    ) / (wordLength + 1);
+    const circleHeight = availableHeight / (
+        wordNumber + gapVertical * (wordNumber - 1)
+    );
+    const circleWidth = availableWidth / (
+        1 + gapPicture + wordLength + gapHorizontal * (wordLength - 1)
+    );
     const circleSize = Math.min(circleHeight, circleWidth);
     const circleRadius = circleSize / 2;
 
@@ -91,9 +93,8 @@ function updatePuzzleGeometry() {
         picture.setAttribute('y', scale * (
             marginTop
             + paddingTop
-            + i*(circleSize+gapVertical)
-            + circleSize
-            - (1 - pictureScale) * circleSize
+            + i * (1+gapVertical) * circleSize
+            + pictureScale * circleSize
         ));
         picture.style.fontSize = appendPx(circleSize * pictureScale * scale);
         for (let j = 0; j < wordLength; j++) {
@@ -103,17 +104,19 @@ function updatePuzzleGeometry() {
                 marginLeft
                 + paddingHorizontal
                 + circleSize
-                + pictureGap
-                + j*(circleSize+gapHorizontal)
+                + gapPicture * circleSize
+                + j * (1+gapHorizontal) * circleSize
                 + circleRadius
             ));
             circle.setAttribute('cy', scale * (
                 marginTop
                 + paddingTop
-                + i*(circleSize+gapVertical)
+                + i * (1+gapVertical) * circleSize
                 + circleRadius
             ));
             circle.setAttribute('r', scale * circleRadius);
+            circle.setAttribute('stroke-width',
+                circleSize * strokeThickness * scale);
         }
     }
 }
