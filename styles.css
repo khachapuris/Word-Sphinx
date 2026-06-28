@@ -31,7 +31,7 @@ aside {
     width: 300px;
     border-right: 1px solid #ddd;
     padding: 20px;
-    height: calc(100% - 60px);
+    height: calc(100% - 100px);
 }
 
 label {
@@ -50,7 +50,7 @@ input[data-coloris] {
 
 main {
     width: clamp(600px, 70%, 1000px);
-    height: calc(100% - 60px);
+    height: calc(100% - 100px);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -80,17 +80,23 @@ svg .margin-line:hover {
     font-family: inherit;
 }
 
-@media(max-width: 900px) {
-    .large-screens-only {
-        display: none;
-    }
+footer {
+    width: 100vw;
+    height: 40px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding: 0 30px;
+    color: gray;
 }
 
-@media(max-width: 650px) {
-    body {
-        background-color: black;
-    }
-    body * {
+footer>* {
+    margin-left: 40px;
+}
+
+@media(max-width: 900px) {
+    .large-screens-only {
         display: none;
     }
 }
