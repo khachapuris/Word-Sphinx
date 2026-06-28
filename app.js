@@ -4,10 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
         alpha: false,
         theme: 'polaroid',
     })
+
+    // Set the page color to the color currently selected in the dialog
+    document.getElementById('current-page-svg')
+        .style.backgroundColor = document.getElementById('bg-color').value;
+
     // Change page color when a new color is selected
-    document.getElementById('bg-color').addEventListener('change', () => {
-        let newColor = document.getElementById('bg-color').value;
+    document.addEventListener('coloris:pick', pickEvent => {
         document.getElementById('current-page-svg')
-            .style.backgroundColor = newColor;
+            .style.backgroundColor = pickEvent.detail.color;
     })
 })
