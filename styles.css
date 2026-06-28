@@ -75,3 +75,22 @@ svg .emoji {
 svg .margin-line:hover {
     stroke: red;
 }
+
+.large-screens-only {
+    font-family: inherit;
+}
+
+@media(max-width: 900px) {
+    .large-screens-only {
+        display: none;
+    }
+}
+
+@media(max-width: 650px) {
+    body {
+        background-color: black;
+    }
+    body * {
+        display: none;
+    }
+}

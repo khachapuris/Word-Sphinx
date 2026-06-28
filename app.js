@@ -8,39 +8,27 @@ let marginTop = 25.4;
 let marginInside = 19;
 let marginOutside = 19;
 let marginBottom = 19;
+let gapVertical = 20; // gap between rows of circles
+let gapHorizontal = 4; // gap between columns of circles
+let pictureGap = 10; // gap between the picture and the circles
+let paddingHorizontal = 15;
+let paddingTop = 30;
+let paddingBottom = 20;
+// These values are countable numbers
+let wordLength = 3;
+let wordNumber = 4;
+// These values depend on page orientation
+let marginRight = marginOutside;
+let marginLeft = marginInside;
+// Miscellaneous
+const pictureScale = 5 / 6; // mm
 
 /* Transform a number into a string that ends with 'px' */
 function appendPx(n) {
     return `${n}px`
 }
 
-/* Update the page margins in the SVG to the current values of the respective
- * global variables */
-function updatePageMargins() {
-    const topLine = document.getElementById('top-margin-line');
-    const insideLine = document.getElementById('inside-margin-line');
-    const outsideLine = document.getElementById('outside-margin-line');
-    const bottomLine = document.getElementById('bottom-margin-line');
-    topLine.setAttribute("y1", marginTop * scale)
-    topLine.setAttribute("y2", marginTop * scale)
-    topLine.setAttribute("x1", 0)
-    topLine.setAttribute("x2", documentWidth * scale)
-    insideLine.setAttribute("x1", marginInside * scale)
-    insideLine.setAttribute("x2", marginInside * scale)
-    insideLine.setAttribute("y1", 0)
-    insideLine.setAttribute("y2", documentHeight * scale)
-    outsideLine.setAttribute("x1", (documentWidth - marginOutside) * scale)
-    outsideLine.setAttribute("x2", (documentWidth - marginOutside) * scale)
-    outsideLine.setAttribute("y1", 0)
-    outsideLine.setAttribute("y2", documentHeight * scale)
-    bottomLine.setAttribute("y1", (documentHeight - marginBottom) * scale)
-    bottomLine.setAttribute("y2", (documentHeight - marginBottom) * scale)
-    bottomLine.setAttribute("x1", 0)
-    bottomLine.setAttribute("x2", documentWidth * scale)
-}
-
-/* Update the height and width of the SVG preview to the current values of the
- * respective global variables */
+/* Update the height and width of the SVG with the global variable values */
 function updateDocumentSize() {
     const pageDiv = document.getElementById('current-page');
     const pageSVG = document.getElementById('current-page-svg');
@@ -50,6 +38,84 @@ function updateDocumentSize() {
     pageSVG.style.height = appendPx(documentHeight * scale);
     pageSVG.setAttribute('width', documentWidth * scale);
     pageSVG.setAttribute('height', documentHeight * scale);
+}
+
+/* Update the page margins in the SVG with the global variable values */
+function updatePageMargins() {
+    const topLine = document.getElementById('top-margin-line');
+    const leftLine = document.getElementById('left-margin-line');
+    const rightLine = document.getElementById('right-margin-line');
+    const bottomLine = document.getElementById('bottom-margin-line');
+    topLine.setAttribute("y1", marginTop * scale)
+    topLine.setAttribute("y2", marginTop * scale)
+    topLine.setAttribute("x1", 0)
+    topLine.setAttribute("x2", documentWidth * scale)
+    leftLine.setAttribute("x1", marginLeft * scale)
+    leftLine.setAttribute("x2", marginLeft * scale)
+    leftLine.setAttribute("y1", 0)
+    leftLine.setAttribute("y2", documentHeight * scale)
+    rightLine.setAttribute("x1", (documentWidth - marginRight) * scale)
+    rightLine.setAttribute("x2", (documentWidth - marginRight) * scale)
+    rightLine.setAttribute("y1", 0)
+    rightLine.setAttribute("y2", documentHeight * scale)
+    bottomLine.setAttribute("y1", (documentHeight - marginBottom) * scale)
+    bottomLine.setAttribute("y2", (documentHeight - marginBottom) * scale)
+    bottomLine.setAttribute("x1", 0)
+    bottomLine.setAttribute("x2", documentWidth * scale)
+}
+
+/* Update the puzzle's geometry with the global variable values */
+function updatePuzzleGeometry() {
+    const availableWidth = documentWidth
+        - marginLeft
+        - marginRight
+        - 2 * paddingHorizontal;
+    const availableHeight = documentHeight
+        - marginTop
+        - marginBottom
+        - paddingTop
+        - paddingBottom;
+    const circleHeight = (
+        availableHeight - gapVertical * (wordNumber - 1)
+    ) / wordNumber;
+    const circleWidth = (
+        availableWidth - gapHorizontal * (wordLength - 1) - pictureGap
+    ) / (wordLength + 1);
+    const circleSize = Math.min(circleHeight, circleWidth);
+    const circleRadius = circleSize / 2;
+
+    // Update each picture and circle
+    for (let i = 0; i < wordNumber; i++) {
+        const picture = document.getElementById(`picture-row${i}`);
+        picture.setAttribute('x', (marginLeft + paddingHorizontal) * scale);
+        picture.setAttribute('y', scale * (
+            marginTop
+            + paddingTop
+            + i*(circleSize+gapVertical)
+            + circleSize
+            - (1 - pictureScale) * circleSize
+        ));
+        picture.style.fontSize = appendPx(circleSize * pictureScale * scale);
+        for (let j = 0; j < wordLength; j++) {
+            const circle = document.querySelector(
+                `.circle-row${i}.circle-col${j}`);
+            circle.setAttribute('cx', scale * (
+                marginLeft
+                + paddingHorizontal
+                + circleSize
+                + pictureGap
+                + j*(circleSize+gapHorizontal)
+                + circleRadius
+            ));
+            circle.setAttribute('cy', scale * (
+                marginTop
+                + paddingTop
+                + i*(circleSize+gapVertical)
+                + circleRadius
+            ));
+            circle.setAttribute('r', scale * circleRadius);
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,8 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-page-svg')
         .style.backgroundColor = document.getElementById('bg-color').value;
     // Update page dimensions
-    updatePageMargins();
     updateDocumentSize();
+    updatePageMargins();
+    updatePuzzleGeometry();
 
     // --- PUZZLE DYNAMIC CONTROLS --
     // Change page color when a new color is selected
