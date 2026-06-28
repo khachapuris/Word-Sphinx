@@ -1,17 +1,17 @@
 // ------ PUZZLE PARAMETERS -----
-// Scale shows the amount of pixels displayed for each millimeter
-let scale = 2;
-// The following values are in mm
-let documentWidth = 210;
-let documentHeight = 297;
-let marginTop = 25.4;
-let marginInside = 19;
-let marginOutside = 19;
-let marginBottom = 19;
-let paddingLeft = 15;
-let paddingRight = 15;
-let paddingTop = 20;
-let paddingBottom = 30;
+// Scale shows the amount of pixels displayed for each inch
+let scale = 51;
+// The following values are in inches
+let documentWidth = 8.27;
+let documentHeight = 11.69;
+let marginTop = 1;
+let marginInside = 0.75;
+let marginOutside = 0.75;
+let marginBottom = 0.75;
+let paddingLeft = 0.6;
+let paddingRight = 0.6;
+let paddingTop = 0.8;
+let paddingBottom = 1.2;
 // These values depend on page orientation
 let marginRight = marginOutside;
 let marginLeft = marginInside;
