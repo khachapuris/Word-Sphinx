@@ -8,7 +8,8 @@ let marginTop = 25.4;
 let marginInside = 19;
 let marginOutside = 19;
 let marginBottom = 19;
-let paddingHorizontal = 15;
+let paddingLeft = 15;
+let paddingRight = 15;
 let paddingTop = 20;
 let paddingBottom = 30;
 // These values depend on page orientation
@@ -71,7 +72,8 @@ function updatePuzzleGeometry() {
     const availableWidth = documentWidth
         - marginLeft
         - marginRight
-        - 2 * paddingHorizontal;
+        - paddingLeft
+        - paddingRight
     const availableHeight = documentHeight
         - marginTop
         - marginBottom
@@ -89,7 +91,7 @@ function updatePuzzleGeometry() {
     // Update each picture and circle
     for (let i = 0; i < wordNumber; i++) {
         const picture = document.getElementById(`picture-row${i}`);
-        picture.setAttribute('x', (marginLeft + paddingHorizontal) * scale);
+        picture.setAttribute('x', (marginLeft + paddingLeft) * scale);
         picture.setAttribute('y', scale * (
             marginTop
             + paddingTop
@@ -102,7 +104,7 @@ function updatePuzzleGeometry() {
                 `.circle-row${i}.circle-col${j}`);
             circle.setAttribute('cx', scale * (
                 marginLeft
-                + paddingHorizontal
+                + paddingLeft
                 + circleSize
                 + gapPicture * circleSize
                 + j * (1+gapHorizontal) * circleSize
