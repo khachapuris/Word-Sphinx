@@ -1,6 +1,6 @@
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
-let scale = 51;
+let scale = 60;
 // The following values are in inches
 let documentWidth = 8.27;
 let documentHeight = 11.69;
@@ -136,6 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-page-svg')
         .style.backgroundColor = document.getElementById('bg-color').value;
     // Update page dimensions
+    const selectedValue = document.getElementById('document-size').value.split('x');
+    const [selectedWidth, selectedHeight] = selectedValue;
+    documentWidth = parseInt(selectedWidth);
+    documentHeight = parseInt(selectedHeight);
     updateDocumentSize();
     updatePageMargins();
     updatePuzzleGeometry();
@@ -145,5 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('coloris:pick', pickEvent => {
         document.getElementById('current-page-svg')
             .style.backgroundColor = pickEvent.detail.color;
+    })
+    // Change page dimensions when a new format is selected
+    document.getElementById('document-size').addEventListener('change', () => {
+        const selectedValue = document.getElementById('document-size').value.split('x');
+        const [selectedWidth, selectedHeight] = selectedValue;
+        documentWidth = parseFloat(selectedWidth);
+        documentHeight = parseFloat(selectedHeight);
+        console.log(documentWidth, documentHeight);
+        updateDocumentSize();
+        updatePageMargins();
+        updatePuzzleGeometry();
     })
 })
