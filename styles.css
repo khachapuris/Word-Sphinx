@@ -9,6 +9,8 @@
 body {
     margin: 0;
     height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 h1 {
@@ -18,6 +20,7 @@ h1 {
 
 header {
     height: 60px;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,11 +28,10 @@ header {
 }
 
 aside {
-    width: clamp(200px, 30%, 400px);
+    width: 300px;
     border-right: 1px solid #ddd;
     padding: 20px;
     height: calc(100% - 60px);
-    float: left;
 }
 
 label {
@@ -47,9 +49,8 @@ input[data-coloris] {
 }
 
 main {
-    width: clamp(calc(100% - 400px), 70%, calc(100% - 200px));
+    width: clamp(600px, 70%, 1000px);
     height: calc(100% - 60px);
-    float: right;
     display: flex;
     flex-direction: row;
     align-items: center;
