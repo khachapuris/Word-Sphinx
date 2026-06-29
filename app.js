@@ -4,17 +4,12 @@ let scale = 60;
 // The following values are in inches
 let documentWidth = 8.27;
 let documentHeight = 11.69;
-let marginTop = 1;
 let marginInside = 0.75;
-let marginOutside = 0.75;
-let marginBottom = 0.75;
+let marginOutside = 0.5;
 let paddingLeft = 0.6;
 let paddingRight = 0.6;
 let paddingTop = 0.8;
 let paddingBottom = 1.2;
-// These values depend on page orientation
-let marginRight = marginOutside;
-let marginLeft = marginInside;
 // These values are dimensionless ratios of various elements to the circle size
 let gapVertical = 0.60; // gap between rows of circles
 let gapHorizontal = 0.15; // gap between columns of circles
@@ -24,7 +19,21 @@ let strokeThickness = 0.035;
 // These values are countable numbers
 let wordLength = 3;
 let wordNumber = 4;
-// Miscellaneous
+// These values are boolean
+let insideIsLeft = true;
+
+// Assign page-orientation dependent values for easier use in calculations
+let marginTop = marginOutside;
+let marginBottom = marginOutside;
+let marginRight;
+let marginLeft;
+if (insideIsLeft) {
+    marginLeft = marginInside;
+    marginRight = marginOutside;
+} else {
+    marginLeft = marginOutside;
+    marginRight = marginInside;
+}
 
 /* Transform a number into a string that ends with 'px' */
 function appendPx(n) {
