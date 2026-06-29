@@ -31,7 +31,7 @@ aside {
     width: 300px;
     border-right: 1px solid #ddd;
     padding: 20px;
-    height: calc(100% - 100px);
+    height: calc(100% - 60px);
 }
 
 label {
@@ -50,7 +50,7 @@ input[data-coloris] {
 
 main {
     width: clamp(600px, 70%, 1000px);
-    height: calc(100% - 100px);
+    height: calc(100% - 60px);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -78,21 +78,6 @@ svg .margin-line:hover {
 
 .large-screens-only {
     font-family: inherit;
-}
-
-footer {
-    width: 100vw;
-    height: 40px;
-    border-top: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    padding: 0 30px;
-    color: gray;
-}
-
-footer>* {
-    margin-left: 40px;
 }
 
 @media(max-width: 900px) {
