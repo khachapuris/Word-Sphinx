@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cinzel&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Short+Stack&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
 * {
@@ -14,7 +14,7 @@ body {
 }
 
 h1 {
-    font-family: 'Cinzel';
+    font-family: 'Short Stack';
     font-size: 32px;
 }
 
@@ -63,7 +63,7 @@ main {
     height: 596px;
 }
 
-#current-page svg {
+#current-page-svg {
     width: 420px;
     height: 594px;
 }
@@ -80,6 +80,11 @@ main {
 
 .margin-hl-line:hover+.margin-line {
     stroke: red;
+}
+
+.letter {
+    font-family: 'Short Stack';
+    fill: gray;
 }
 
 .large-screens-only {
