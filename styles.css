@@ -68,11 +68,17 @@ main {
     height: 594px;
 }
 
-svg .emoji {
+.emoji {
     font-size: 50px;
 }
 
-svg .margin-line:hover {
+.margin-hl-line {
+    stroke: red;
+    stroke-width: 6px;
+    stroke-opacity: 0; 
+}
+
+.margin-hl-line:hover+.margin-line {
     stroke: red;
 }
 
