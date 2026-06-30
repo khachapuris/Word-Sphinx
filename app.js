@@ -10,6 +10,9 @@ let paddingLeft = 0.5;
 let paddingRight = 0.5;
 let paddingTop = 0.5;
 let paddingBottom = 0.5;
+let letterRandomOffset = 0.01;
+// These values are in degrees
+let letterRandomRotation = 1;
 // These values are dimensionless ratios of various elements to the circle size
 let gapVertical = 0.60; // gap between rows of circles
 let gapHorizontal = 0.15; // gap between columns of circles
@@ -205,8 +208,12 @@ function updatePuzzleGeometry() {
                 + paddingTop
                 + i * (1+gapVertical) * circleSize
                 + circleRadius
+                + (Math.random() * 2 - 1) * letterRandomOffset
             ));
             letter.style.fontSize = appendPx(letterScale * circleSize * scale);
+            // Add a personal touch to each letter
+            letter.setAttribute('rotate',
+                (Math.random() * 2 - 1) * letterRandomRotation);
         }
     }
 }
