@@ -16,8 +16,8 @@ let letterRandomRotation = 1;
 // These values are dimensionless ratios of various elements to the circle size
 let gapVertical = 0.60; // gap between rows of circles
 let gapHorizontal = 0.15; // gap between columns of circles
-let gapPicture = 0.30; // gap between the picture and the circles
-let pictureScale = 0.80;
+let gapPicture = 1.00; // gap between the picture and the circles
+let pictureScale = 1.80;
 let letterScale = 0.80;
 let strokeThickness = 0.035;
 // These values are countable numbers
@@ -40,10 +40,10 @@ if (insideIsLeft) {
 
 // ------- PUZZLE CONTENT -------
 let wordList = [
-    { word: ' at', emoji: '&#128049;' },
-    { word: ' an', emoji: '&#128656;' },
-    { word: ' at', emoji: '&#128000;' },
-    { word: ' at', emoji: '&#129415;' },
+    { word: 'cat', preFilled: ' at' },
+    { word: 'van', preFilled: ' an' },
+    { word: 'rat', preFilled: ' at' },
+    { word: 'bat', preFilled: ' at' },
 ];
 let wordNumber = wordList.length;
 
@@ -120,9 +120,9 @@ function updatePuzzleContents() {
         row.id = `row${i}-group`;
         pageContent.appendChild(row);
         // Add a picture
-        const picture = createSVGElement('text');
+        const picture = createSVGElement('image');
         picture.classList.add('picture', `row${i}`);
-        picture.innerHTML = wordList[i]['emoji'];
+        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`)
         row.appendChild(picture);
 
         for (let j = 0; j < wordLength; j++) {
@@ -137,7 +137,7 @@ function updatePuzzleContents() {
             letter.setAttribute('text-anchor', 'middle');
             letter.setAttribute('dominant-baseline', 'central');
             letter.classList.add('letter', `row${i}`, `col${j}`);
-            letter.innerHTML = wordList[i]['word'][j].toUpperCase();
+            letter.innerHTML = wordList[i]['preFilled'][j].toUpperCase();
             row.appendChild(letter);
         }
     }
@@ -172,9 +172,9 @@ function updatePuzzleGeometry() {
             marginTop
             + paddingTop
             + i * (1+gapVertical) * circleSize
-            + pictureScale * circleSize
+            + (1 - pictureScale) / 2 * circleSize
         ));
-        picture.style.fontSize = appendPx(circleSize * pictureScale * scale);
+        picture.setAttribute('width', circleSize * pictureScale * scale);
         for (let j = 0; j < wordLength; j++) {
             const circle = document.querySelector(`.circle.row${i}.col${j}`);
             circle.setAttribute('cx', scale * (
@@ -218,6 +218,13 @@ function updatePuzzleGeometry() {
     }
 }
 
+/* Set the color of pre-filled letters in the puzzle to the given color */
+function setLetterColor(color) {
+    document.querySelectorAll('.letter').forEach(letter => {
+        letter.style.fill = color;
+    })
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ------- GENERAL SET UP -------
     // Set up the color selector widget
@@ -239,12 +246,20 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePageMargins();
     updatePuzzleContents();
     updatePuzzleGeometry();
+    setLetterColor(document.getElementById('letter-color').value);
 
     // --- PUZZLE DYNAMIC CONTROLS --
     // Change page color when a new color is selected
     document.addEventListener('coloris:pick', pickEvent => {
-        document.getElementById('current-page-svg')
-            .style.backgroundColor = pickEvent.detail.color;
+        switch (pickEvent.detail.currentEl.id) {
+            case 'bg-color':
+                document.getElementById('current-page-svg')
+                    .style.backgroundColor = pickEvent.detail.color;
+                break;
+            case 'letter-color':
+                setLetterColor(pickEvent.detail.color);
+                break;
+        }
     })
     // Change page dimensions when a new format is selected
     document.getElementById('document-size').addEventListener('change', () => {
