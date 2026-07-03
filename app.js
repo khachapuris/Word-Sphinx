@@ -255,6 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'bg-color':
                 document.getElementById('current-page-svg')
                     .style.backgroundColor = pickEvent.detail.color;
+                document.documentElement.style.setProperty(
+                    '--bg-color', pickEvent.detail.color);
                 break;
             case 'letter-color':
                 setLetterColor(pickEvent.detail.color);

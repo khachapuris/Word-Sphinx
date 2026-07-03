@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Short+Stack&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
+:root {
+    --bg-color: white;
+    --border-color: color-mix(in srgb, var(--bg-color) 67%, gray 33%);
+}
+
 * {
     font-family: 'Inter';
     box-sizing: border-box;
@@ -34,6 +39,10 @@ aside {
     height: calc(100% - 60px);
 }
 
+.input-group {
+    margin-bottom: 20px;
+}
+
 label {
     display: block;
     padding-bottom: 5px;
@@ -58,9 +67,14 @@ main {
 }
 
 #current-page {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     width: 422px;
     height: 596px;
+    box-shadow: color-mix(in srgb, var(--border-color) 50%, white 50%) 0 0 100px 20px;
+}
+
+#current-page:hover {
+    box-shadow: var(--border-color) 0 0 100px 20px;
 }
 
 #current-page-svg {
