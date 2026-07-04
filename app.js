@@ -109,7 +109,7 @@ function updatePageMargins() {
 function updatePuzzleContents() {
 
     // First, erase all previous groups and objects
-    document.getElementById('current-page-content').remove()
+    document.getElementById('current-page-content').remove();
     const pageContent = createSVGElement('g');
     pageContent.id = 'current-page-content';
     document.getElementById('current-page-svg').appendChild(pageContent);
@@ -122,7 +122,7 @@ function updatePuzzleContents() {
         // Add a picture
         const picture = createSVGElement('image');
         picture.classList.add('picture', `row${i}`);
-        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`)
+        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`);
         row.appendChild(picture);
 
         for (let j = 0; j < wordLength; j++) {
@@ -225,6 +225,18 @@ function setLetterColor(color) {
     })
 }
 
+/* Update the words and pictures in the puzzle to match the wordList */
+function updateWordsAndPictures() {
+    for (let i = 0; i < wordNumber; i++) {
+        const picture = document.querySelector(`.picture.row${i}`);
+        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`);
+        for (let j = 0; j < wordLength; j++) {
+            const letter = document.querySelector(`.letter.row${i}.col${j}`);
+            letter.innerHTML = wordList[i]['preFilled'][j].toUpperCase();
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ------- GENERAL SET UP -------
     // Set up the color selector widget
@@ -238,7 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-page-svg')
         .style.backgroundColor = document.getElementById('bg-color').value;
     // Update page dimensions
-    const selectedValue = document.getElementById('document-size').value.split('x');
+    const selectedValue = document.getElementById('document-size')
+        .value.split('x');
     const [selectedWidth, selectedHeight] = selectedValue;
     documentWidth = parseFloat(selectedWidth);
     documentHeight = parseFloat(selectedHeight);
@@ -265,7 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     // Change page dimensions when a new format is selected
     document.getElementById('document-size').addEventListener('change', () => {
-        const selectedValue = document.getElementById('document-size').value.split('x');
+        const selectedValue = document.getElementById('document-size')
+            .value.split('x');
         const [selectedWidth, selectedHeight] = selectedValue;
         documentWidth = parseFloat(selectedWidth);
         documentHeight = parseFloat(selectedHeight);
@@ -274,4 +288,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePageMargins();
         updatePuzzleGeometry();
     })
+    // Edit the word list interactively
+    for (let i = 0; i < wordNumber; i++) {
+        const input = document.querySelector(`#word-list input.row${i}`);
+        input.addEventListener('change', () => {
+            wordList[i] = {
+                word: input.value,
+                preFilled: input.value.replace(/^./, ' '),
+            };
+            console.log(wordList);
+            updateWordsAndPictures();
+        });
+    }
 })
