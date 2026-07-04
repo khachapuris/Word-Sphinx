@@ -41,7 +41,7 @@ if (insideIsLeft) {
 // ------- PUZZLE CONTENT -------
 let wordList = [
     { word: 'cat', preFilled: ' at' },
-    { word: 'van', preFilled: ' an' },
+    { word: 'hat', preFilled: ' at' },
     { word: 'rat', preFilled: ' at' },
     { word: 'bat', preFilled: ' at' },
 ];
@@ -140,7 +140,7 @@ function updatePuzzleContents() {
             // Make a circle for each letter of the word
             const circle = createSVGElement('circle');
             circle.setAttribute('stroke', 'black');
-            circle.setAttribute('fill', 'white');
+            circle.setAttribute('fill', 'rgba(255, 255, 255, 0.5)');
             circle.classList.add('circle', `row${i}`, `col${j}`);
             row.appendChild(circle)
             // Add pre-filled letters
@@ -248,6 +248,44 @@ function updatePuzzleWords() {
     }
 }
 
+/* The callback to editing the ith word in the word list */
+function editWordCallback(i) {
+
+    function wrapper() {
+        const input = document.querySelector(`#word-list input.row${i}`);
+        if (i == wordList.length) {
+            wordList.push({
+                word: input.value,
+                preFilled: input.value.replace(/^./, ' '),
+            });
+            wordNumber = wordList.length;
+            updatePuzzleContents();
+            updatePuzzleGeometry();
+            const newLi = document.createElement('li');
+            const newInput = document.createElement('input');
+            newInput.setAttribute('type', 'text');
+            newInput.classList.add(`row${i + 1}`);
+            newInput.addEventListener('change', editWordCallback(i + 1));
+            document.getElementById('word-list').appendChild(newLi);
+            newLi.appendChild(newInput);
+        } else if (i == wordList.length - 1 && input.value.length < 1) {
+            wordList.pop();
+            wordNumber = wordList.length;
+            document.querySelector(`#word-list li:has(input.row${i + 1})`).remove();
+            updatePuzzleContents();
+            updatePuzzleGeometry();
+        } else {
+            wordList[i] = {
+                word: input.value,
+                preFilled: input.value.replace(/^./, ' '),
+            };
+            updatePuzzleWords();
+        }
+    }
+
+    return wrapper;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ------- GENERAL SET UP -------
     // Set up the color selector widget
@@ -308,16 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePuzzleGeometry();
     })
     // Edit the word list interactively
-    for (let i = 0; i < wordNumber; i++) {
+    for (let i = 0; i <= wordNumber; i++) {
         const input = document.querySelector(`#word-list input.row${i}`);
-        input.addEventListener('change', () => {
-            wordList[i] = {
-                word: input.value,
-                preFilled: input.value.replace(/^./, ' '),
-            };
-            console.log(wordList);
-            updatePuzzleWords();
-        });
+        input.addEventListener('change', editWordCallback(i));
     }
     // Shuffle button functinality
     document.querySelector('.shuffle-words').addEventListener('click', () => {
@@ -327,5 +358,5 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = wordList[i]['word'];
         }
         updatePuzzleWords();
-    })
+    });
 })
