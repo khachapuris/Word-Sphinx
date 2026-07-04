@@ -47,6 +47,17 @@ let wordList = [
 ];
 let wordNumber = wordList.length;
 
+/* Shuffle an array randomly */
+function shuffle(array) {
+  let currentIndex = array.length;
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
+
 /* Transform a number into a string that ends with 'px'. */
 function appendPx(n) {
     return `${n}px`
@@ -226,7 +237,7 @@ function setLetterColor(color) {
 }
 
 /* Update the words and pictures in the puzzle to match the wordList */
-function updateWordsAndPictures() {
+function updatePuzzleWords() {
     for (let i = 0; i < wordNumber; i++) {
         const picture = document.querySelector(`.picture.row${i}`);
         picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`);
@@ -249,6 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set the page color to the color currently selected in the dialog
     document.getElementById('current-page-svg')
         .style.backgroundColor = document.getElementById('bg-color').value;
+    // Update the word list to match the 'Edit word list' section
+    for (let i = 0; i < wordNumber; i++) {
+        const input = document.querySelector(`#word-list input.row${i}`);
+        wordList[i] = {
+            word: input.value,
+            preFilled: input.value.replace(/^./, ' '),
+        };
+    }
     // Update page dimensions
     const selectedValue = document.getElementById('document-size')
         .value.split('x');
@@ -297,7 +316,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 preFilled: input.value.replace(/^./, ' '),
             };
             console.log(wordList);
-            updateWordsAndPictures();
+            updatePuzzleWords();
         });
     }
+    // Shuffle button functinality
+    document.querySelector('.shuffle-words').addEventListener('click', () => {
+        shuffle(wordList);
+        for (let i = 0; i < wordNumber; i++) {
+            const input = document.querySelector(`#word-list input.row${i}`);
+            input.value = wordList[i]['word'];
+        }
+        updatePuzzleWords();
+    })
 })

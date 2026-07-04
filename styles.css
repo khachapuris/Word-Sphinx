@@ -111,6 +111,7 @@ main {
     width: 422px;
     height: 596px;
     box-shadow: var(--shadow-color) 0 0 100px 20px;
+    transition: box-shadow 100ms;
 }
 
 #current-page:hover {
