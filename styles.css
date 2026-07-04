@@ -71,6 +71,7 @@ label {
 input[data-coloris] {
     width: 60px;
     height: 50px;
+    cursor: pointer;
 }
 
 #word-list li {
@@ -78,7 +79,7 @@ input[data-coloris] {
 }
 
 #word-list input {
-    width: 160px;
+    width: 100px;
     height: 30px;
     margin: 0;
     margin-left: -5px;
@@ -95,6 +96,21 @@ input[data-coloris] {
 #word-list input:focus {
     outline: none;
     border: 1px solid #8888ff;
+}
+
+button {
+    width: 66%;
+    height: 30px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: black;
+    border: 1px solid black;
+    color: white;
 }
 
 main {
