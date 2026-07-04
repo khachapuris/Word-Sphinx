@@ -39,13 +39,12 @@ if (insideIsLeft) {
 }
 
 // ------- PUZZLE CONTENT -------
-let wordList = [
-    { word: 'cat', preFilled: ' at' },
-    { word: 'hat', preFilled: ' at' },
-    { word: 'rat', preFilled: ' at' },
-    { word: 'bat', preFilled: ' at' },
-];
-let wordNumber = wordList.length;
+let wordList = localStorage.getItem('wordList');
+if (wordList === null) {
+    wordList = ['cat', 'hat', 'rat', 'bat'];
+} else {
+    wordList = wordList.split(',');
+}
 
 /* Shuffle an array randomly */
 function shuffle(array) {
@@ -56,6 +55,11 @@ function shuffle(array) {
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex], array[currentIndex]];
   }
+}
+
+/* Replace the first character of the given word with a space */
+function hideLetter(word) {
+    return word.replace(/^./, ' ');
 }
 
 /* Transform a number into a string that ends with 'px'. */
@@ -125,7 +129,7 @@ function updatePuzzleContents() {
     pageContent.id = 'current-page-content';
     document.getElementById('current-page-svg').appendChild(pageContent);
 
-    for (let i = 0; i < wordNumber; i++) {
+    for (let i = 0; i < wordList.length; i++) {
         // Create a group for each row
         const row = createSVGElement('g');
         row.id = `row${i}-group`;
@@ -133,7 +137,7 @@ function updatePuzzleContents() {
         // Add a picture
         const picture = createSVGElement('image');
         picture.classList.add('picture', `row${i}`);
-        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`);
+        picture.setAttribute('href', `pictures/${wordList[i]}.png`);
         row.appendChild(picture);
 
         for (let j = 0; j < wordLength; j++) {
@@ -148,7 +152,7 @@ function updatePuzzleContents() {
             letter.setAttribute('text-anchor', 'middle');
             letter.setAttribute('dominant-baseline', 'central');
             letter.classList.add('letter', `row${i}`, `col${j}`);
-            letter.innerHTML = wordList[i]['preFilled'][j].toUpperCase();
+            letter.innerHTML = hideLetter(wordList[i])[j].toUpperCase();
             row.appendChild(letter);
         }
     }
@@ -167,7 +171,7 @@ function updatePuzzleGeometry() {
         - paddingTop
         - paddingBottom;
     const circleHeight = availableHeight / (
-        wordNumber + gapVertical * (wordNumber - 1)
+        wordList.length + gapVertical * (wordList.length - 1)
     );
     const circleWidth = availableWidth / (
         1 + gapPicture + wordLength + gapHorizontal * (wordLength - 1)
@@ -176,7 +180,7 @@ function updatePuzzleGeometry() {
     const circleRadius = circleSize / 2;
 
     // Update each picture and circle
-    for (let i = 0; i < wordNumber; i++) {
+    for (let i = 0; i < wordList.length; i++) {
         const picture = document.querySelector(`.picture.row${i}`);
         picture.setAttribute('x', (marginLeft + paddingLeft) * scale);
         picture.setAttribute('y', scale * (
@@ -236,14 +240,14 @@ function setLetterColor(color) {
     })
 }
 
-/* Update the words and pictures in the puzzle to match the wordList */
+/* Update the words and pictures in the puzzle to match the word list */
 function updatePuzzleWords() {
-    for (let i = 0; i < wordNumber; i++) {
+    for (let i = 0; i < wordList.length; i++) {
         const picture = document.querySelector(`.picture.row${i}`);
-        picture.setAttribute('href', `pictures/${wordList[i]['word']}.png`);
+        picture.setAttribute('href', `pictures/${wordList[i]}.png`);
         for (let j = 0; j < wordLength; j++) {
             const letter = document.querySelector(`.letter.row${i}.col${j}`);
-            letter.innerHTML = wordList[i]['preFilled'][j].toUpperCase();
+            letter.innerHTML = hideLetter(wordList[i])[j].toUpperCase();
         }
     }
 }
@@ -253,12 +257,9 @@ function editWordCallback(i) {
 
     function wrapper() {
         const input = document.querySelector(`#word-list input.row${i}`);
-        if (i == wordList.length) {
-            wordList.push({
-                word: input.value,
-                preFilled: input.value.replace(/^./, ' '),
-            });
-            wordNumber = wordList.length;
+        const wordNumber = wordList.length;
+        if (i == wordNumber) {
+            wordList.push(input.value);
             updatePuzzleContents();
             updatePuzzleGeometry();
             const newLi = document.createElement('li');
@@ -268,19 +269,16 @@ function editWordCallback(i) {
             newInput.addEventListener('change', editWordCallback(i + 1));
             document.getElementById('word-list').appendChild(newLi);
             newLi.appendChild(newInput);
-        } else if (i == wordList.length - 1 && input.value.length < 1) {
+        } else if (i == wordNumber - 1 && input.value.length < 1) {
             wordList.pop();
-            wordNumber = wordList.length;
             document.querySelector(`#word-list li:has(input.row${i + 1})`).remove();
             updatePuzzleContents();
             updatePuzzleGeometry();
         } else {
-            wordList[i] = {
-                word: input.value,
-                preFilled: input.value.replace(/^./, ' '),
-            };
+            wordList[i] = input.value;
             updatePuzzleWords();
         }
+        localStorage.setItem('wordList', wordList);
     }
 
     return wrapper;
@@ -298,14 +296,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set the page color to the color currently selected in the dialog
     document.getElementById('current-page-svg')
         .style.backgroundColor = document.getElementById('bg-color').value;
-    // Update the word list to match the 'Edit word list' section
-    for (let i = 0; i < wordNumber; i++) {
-        const input = document.querySelector(`#word-list input.row${i}`);
-        wordList[i] = {
-            word: input.value,
-            preFilled: input.value.replace(/^./, ' '),
-        };
+    // Update the inputs to match the restored word list
+    for (let i = 0; i <= wordList.length; i++) {
+        const li = document.createElement('li');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.classList.add(`row${i}`);
+        // input.addEventListener('change', editWordCallback(i));
+        document.getElementById('word-list').appendChild(li);
+        li.appendChild(input);
+        if (i < wordList.length) {
+            input.value = wordList[i];
+        }
     }
+    console.log(wordList);
     // Update page dimensions
     const selectedValue = document.getElementById('document-size')
         .value.split('x');
@@ -346,17 +350,18 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePuzzleGeometry();
     })
     // Edit the word list interactively
-    for (let i = 0; i <= wordNumber; i++) {
+    for (let i = 0; i <= wordList.length; i++) {
         const input = document.querySelector(`#word-list input.row${i}`);
         input.addEventListener('change', editWordCallback(i));
     }
     // Shuffle button functinality
     document.querySelector('.shuffle-words').addEventListener('click', () => {
         shuffle(wordList);
-        for (let i = 0; i < wordNumber; i++) {
+        for (let i = 0; i < wordList.length; i++) {
             const input = document.querySelector(`#word-list input.row${i}`);
-            input.value = wordList[i]['word'];
+            input.value = wordList[i];
         }
         updatePuzzleWords();
+        localStorage.setItem('wordList', wordList);
     });
 })
