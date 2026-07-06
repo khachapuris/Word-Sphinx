@@ -5,6 +5,7 @@
     --bg-color: white;
     --border-color: color-mix(in srgb, var(--bg-color) 67%, gray 33%);
     --shadow-color: color-mix(in srgb, var(--border-color) 50%, white 50%);
+    --letter-color: gray;
 }
 
 * {
@@ -155,7 +156,7 @@ main {
 
 .letter {
     font-family: 'Short Stack';
-    fill: gray;
+    fill: var(--letter-color);
 }
 
 .large-screens-only {

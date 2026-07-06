@@ -333,6 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'letter-color':
                 setLetterColor(pickEvent.detail.color);
+                document.documentElement.style.setProperty(
+                    '--letter-color', pickEvent.detail.color);
                 break;
         }
     })
