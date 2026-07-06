@@ -39,11 +39,10 @@ if (insideIsLeft) {
 }
 
 // ------- PUZZLE CONTENT -------
-let wordList = localStorage.getItem('wordList');
-if (wordList === null) {
-    wordList = ['cat', 'hat', 'rat', 'bat'];
-} else {
-    wordList = JSON.parse(wordList);
+let wordListJSON = localStorage.getItem('wordList');
+let wordList = ['cat', 'hat', 'rat', 'bat'];
+if (wordListJSON !== null) {
+    wordList = JSON.parse(wordListJSON);
 }
 
 /* Shuffle an array randomly */
@@ -252,36 +251,46 @@ function updatePuzzleWords() {
     }
 }
 
-/* The callback to editing the ith word in the word list */
-function editWordCallback(i) {
-
-    function wrapper() {
-        const input = document.querySelector(`#word-list input.row${i}`);
-        const wordNumber = wordList.length;
-        if (i == wordNumber) {
-            wordList.push(input.value);
-            updatePuzzleContents();
-            updatePuzzleGeometry();
-            const newLi = document.createElement('li');
-            const newInput = document.createElement('input');
-            newInput.setAttribute('type', 'text');
-            newInput.classList.add(`row${i + 1}`);
-            newInput.addEventListener('change', editWordCallback(i + 1));
-            document.getElementById('word-list').appendChild(newLi);
-            newLi.appendChild(newInput);
-        } else if (i == wordNumber - 1 && input.value.length < 1) {
-            wordList.pop();
-            document.querySelector(`#word-list li:has(input.row${i + 1})`).remove();
-            updatePuzzleContents();
-            updatePuzzleGeometry();
-        } else {
-            wordList[i] = input.value;
-            updatePuzzleWords();
+/* The callback to editing a word in the word list */
+function editWordCallback(changeEvent) {
+    // Get the current index of the element
+    const i = parseInt(Array.from(changeEvent.target.classList)
+        .find(className => className.startsWith('row'))
+        .substring(3));
+    const input = document.querySelector(`#word-list input.row${i}`);
+    const wordNumber = wordList.length;
+    if (i == wordNumber) {
+        // Add an element
+        wordList.push(input.value);
+        updatePuzzleContents();
+        updatePuzzleGeometry();
+        const newLi = document.createElement('li');
+        const newInput = document.createElement('input');
+        newInput.setAttribute('type', 'text');
+        newInput.classList.add(`row${i + 1}`);
+        newInput.addEventListener('change', editWordCallback);
+        document.getElementById('word-list').appendChild(newLi);
+        newLi.appendChild(newInput);
+    } else if (i < wordNumber && input.value.length < 1) {
+        // Remove an element
+        wordList.splice(i, 1);
+        console.log(wordList);
+        document.querySelector(`#word-list li:has(input.row${i})`).remove();
+        // Shift all list item indices after the removed element one down
+        for (let shift = i + 1; shift <= wordNumber; shift++) {
+            const shiftInput = document.querySelector(
+                `#word-list input.row${shift}`);
+            shiftInput.classList.remove(`row${shift}`);
+            shiftInput.classList.add(`row${shift - 1}`);
         }
-        localStorage.setItem('wordList', JSON.stringify(wordList));
+        updatePuzzleContents();
+        updatePuzzleGeometry();
+    } else {
+        // Change an element
+        wordList[i] = input.value;
+        updatePuzzleWords();
     }
-
-    return wrapper;
+    localStorage.setItem('wordList', JSON.stringify(wordList));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -353,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Edit the word list interactively
     for (let i = 0; i <= wordList.length; i++) {
         const input = document.querySelector(`#word-list input.row${i}`);
-        input.addEventListener('change', editWordCallback(i));
+        input.addEventListener('change', editWordCallback);
     }
     // Shuffle button functinality
     document.querySelector('.shuffle-words').addEventListener('click', () => {
