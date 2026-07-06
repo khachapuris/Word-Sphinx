@@ -43,7 +43,7 @@ let wordList = localStorage.getItem('wordList');
 if (wordList === null) {
     wordList = ['cat', 'hat', 'rat', 'bat'];
 } else {
-    wordList = wordList.split(',');
+    wordList = JSON.parse(wordList);
 }
 
 /* Shuffle an array randomly */
@@ -278,7 +278,7 @@ function editWordCallback(i) {
             wordList[i] = input.value;
             updatePuzzleWords();
         }
-        localStorage.setItem('wordList', wordList);
+        localStorage.setItem('wordList', JSON.stringify(wordList));
     }
 
     return wrapper;
@@ -302,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.createElement('input');
         input.setAttribute('type', 'text');
         input.classList.add(`row${i}`);
-        // input.addEventListener('change', editWordCallback(i));
         document.getElementById('word-list').appendChild(li);
         li.appendChild(input);
         if (i < wordList.length) {
@@ -362,6 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = wordList[i];
         }
         updatePuzzleWords();
-        localStorage.setItem('wordList', wordList);
+        localStorage.setItem('wordList', JSON.stringify(wordList));
     });
 })

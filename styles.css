@@ -52,7 +52,7 @@ label {
     padding-bottom: 5px;
 }
 
-.input-group select {
+select {
     width: 100%;
     height: 30px;
     background-color: #eee;
