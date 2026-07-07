@@ -385,15 +385,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
     // ----- DOWNLOAD SVG IMAGE -----
-    // Get svg element
-    const svg = document.getElementById('current-page-svg');
-    // Get svg source
-    const serializer = new XMLSerializer();
-    let source = serializer.serializeToString(svg);
-    // Add xml declaration
-    source = '<?xml version="1.0" encoding="UTF-8"?>' + source;
-    // Set url value to a element's href attribute
     document.getElementById('download').addEventListener('click', () => {
+        const svgElement = document.getElementById('current-page-svg');
+        // Get the source text of the SVG element using XML serializer
+        const serializer = new XMLSerializer();
+        let source = serializer.serializeToString(svgElement);
+        // Add an XML declaration for the SVG to be readable as a separate file
+        source = '<?xml version="1.0" encoding="UTF-8"?>' + source;
+        // Use a blob URL to download the image
         const blob = new Blob([source], {
             type: "image/svg",
         });
