@@ -385,18 +385,25 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
     // ----- DOWNLOAD SVG IMAGE -----
-    // Get svg element.
+    // Get svg element
     const svg = document.getElementById('current-page-svg');
-    // Get svg source.
+    // Get svg source
     const serializer = new XMLSerializer();
     let source = serializer.serializeToString(svg);
     // Add xml declaration
     source = '<?xml version="1.0" encoding="UTF-8"?>' + source;
-    // Set url value to a element's href attribute.
+    // Set url value to a element's href attribute
     document.getElementById('download').addEventListener('click', () => {
-        const paragraph = document.createElement('p');
-        paragraph.innerHTML = escapeHTML(source);
-        document.body.appendChild(paragraph);
-    })
-    // You can download svg file by right click menu.
+        const blob = new Blob([source], {
+            type: "image/svg",
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.innerText = 'Download the image as SVG';
+        link.download = 'puzzle.svg'
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
 })
