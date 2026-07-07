@@ -232,8 +232,16 @@ function updatePuzzleGeometry() {
     }
 }
 
+/* Set the background color of the puzzle to the given color */
+function setBackgroundColor(color) {
+    document.getElementById('current-page-svg')
+        .style.backgroundColor = color;
+    document.documentElement.style.setProperty('--bg-color', color);
+}
+
 /* Set the color of pre-filled letters in the puzzle to the given color */
 function setLetterColor(color) {
+    document.documentElement.style.setProperty('--letter-color', color);
     document.querySelectorAll('.letter').forEach(letter => {
         letter.style.fill = color;
     })
@@ -303,8 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- PUZZLE INITIAL VALUES ---
     // Set the page color to the color currently selected in the dialog
-    document.getElementById('current-page-svg')
-        .style.backgroundColor = document.getElementById('bg-color').value;
+    setBackgroundColor(document.getElementById('bg-color').value);
     // Update the inputs to match the restored word list
     for (let i = 0; i <= wordList.length; i++) {
         const li = document.createElement('li');
@@ -335,15 +342,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('coloris:pick', pickEvent => {
         switch (pickEvent.detail.currentEl.id) {
             case 'bg-color':
-                document.getElementById('current-page-svg')
-                    .style.backgroundColor = pickEvent.detail.color;
-                document.documentElement.style.setProperty(
-                    '--bg-color', pickEvent.detail.color);
+                setBackgroundColor(pickEvent.detail.color);
                 break;
             case 'letter-color':
                 setLetterColor(pickEvent.detail.color);
-                document.documentElement.style.setProperty(
-                    '--letter-color', pickEvent.detail.color);
                 break;
         }
     })
@@ -374,4 +376,5 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePuzzleWords();
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
+    // ----- DOWNLOAD SVG IMAGE -----
 })

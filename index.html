@@ -21,45 +21,53 @@
     </header>
 
     <aside>
-      <div class="input-group">
-        <label for="document-size">Choose document dimensions</label>
-        <select name="document-size" id="document-size">
-          <option value="11.69x8.27">A4 Landscape (11.69&Prime;&thinsp;&times;&thinsp;8.27&Prime;)</option>
-          <option value="11x8.5">Letter Landscape (11&Prime;&thinsp;&times;&thinsp;8.5&Prime;)</option>
-          <option value="8.27x11.69" selected>A4 Portrait (8.27&Prime;&thinsp;&times;&thinsp;11.69&Prime;)</option>
-          <option value="8.5x11">Letter Portrait (8.5&Prime;&thinsp;&times;&thinsp;11&Prime;)</option>
-          <option value="10x8">10&Prime;&thinsp;&times;&thinsp;8&Prime;</option>
-          <option value="8x10">8&Prime;&thinsp;&times;&thinsp;10&Prime;</option>
-          <option value="8.5x8.5">8.5&Prime;&thinsp;&times;&thinsp;8.5&Prime;</option>
-          <option value="7x10">7&Prime;&thinsp;&times;&thinsp;10&Prime;</option>
-          <option value="8x8">8&Prime;&thinsp;&times;&thinsp;8&Prime;</option>
-          <option value="7.44x9.69">Crown Quarto (7.44&Prime;&thinsp;&times;&thinsp;9.69&Prime;)</option>
-          <option value="6x9">Pocket (6&Prime;&thinsp;&times;&thinsp;9&Prime;)</option>
-          <option value="5.5x8.5">Half-letter (5.5&Prime;&thinsp;&times;&thinsp;8.5&Prime;)</option>
-        </select>
+      <div class="flex-wing">
+        <div class="input-group">
+          <label for="document-size">Choose document dimensions</label>
+          <select name="document-size" id="document-size">
+            <option value="11.69x8.27">A4 Landscape (11.69&Prime;&thinsp;&times;&thinsp;8.27&Prime;)</option>
+            <option value="11x8.5">Letter Landscape (11&Prime;&thinsp;&times;&thinsp;8.5&Prime;)</option>
+            <option value="8.27x11.69" selected>A4 Portrait (8.27&Prime;&thinsp;&times;&thinsp;11.69&Prime;)</option>
+            <option value="8.5x11">Letter Portrait (8.5&Prime;&thinsp;&times;&thinsp;11&Prime;)</option>
+            <option value="10x8">10&Prime;&thinsp;&times;&thinsp;8&Prime;</option>
+            <option value="8x10">8&Prime;&thinsp;&times;&thinsp;10&Prime;</option>
+            <option value="8.5x8.5">8.5&Prime;&thinsp;&times;&thinsp;8.5&Prime;</option>
+            <option value="7x10">7&Prime;&thinsp;&times;&thinsp;10&Prime;</option>
+            <option value="8x8">8&Prime;&thinsp;&times;&thinsp;8&Prime;</option>
+            <option value="7.44x9.69">Crown Quarto (7.44&Prime;&thinsp;&times;&thinsp;9.69&Prime;)</option>
+            <option value="6x9">Pocket (6&Prime;&thinsp;&times;&thinsp;9&Prime;)</option>
+            <option value="5.5x8.5">Half-letter (5.5&Prime;&thinsp;&times;&thinsp;8.5&Prime;)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="bg-color">Change the background color</label>
+          <input
+            name="bg-color"
+            id="bg-color"
+            type="text"
+            value="#ffffff"
+            data-coloris>
+        </div>
+        <div class="input-group">
+          <label for="letter-color">Change the color of the letters</label>
+          <input
+            name="letter-color"
+            id="letter-color"
+            type="text"
+            value="#808080"
+            data-coloris>
+        </div>
+        <div class="input-group">
+          <label>Edit the word list</label>
+          <ul id="word-list"></ul>
+          <button type="button" class="shuffle-words">Shuffle</button>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="bg-color">Change the background color</label>
-        <input
-          name="bg-color"
-          id="bg-color"
-          type="text"
-          value="#ffffff"
-          data-coloris>
-      </div>
-      <div class="input-group">
-        <label for="letter-color">Change the color of the letters</label>
-        <input
-          name="letter-color"
-          id="letter-color"
-          type="text"
-          value="#808080"
-          data-coloris>
-      </div>
-      <div class="input-group">
-        <label>Edit the word list</label>
-        <ul id="word-list"></ul>
-        <button type="button" class="shuffle-words">Shuffle</button>
+      <div class="flex-wing">
+        <div class="input-group">
+          <label>Download the document</label>
+          <button type="button" class="download">as SVG</button>
+        </div>
       </div>
     </aside>
 

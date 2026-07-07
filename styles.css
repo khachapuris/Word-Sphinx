@@ -40,6 +40,9 @@ aside {
     border-right: 1px solid #ddd;
     padding: 20px;
     height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .input-group {
@@ -100,8 +103,7 @@ input[data-coloris] {
 }
 
 button {
-    width: 66%;
-    height: 30px;
+    padding: 5px;
     background-color: #eee;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -112,6 +114,14 @@ button:hover {
     background-color: black;
     border: 1px solid black;
     color: white;
+}
+
+.shuffle-words {
+    width: 66%;
+}
+
+.download {
+    width: 100%;
 }
 
 main {
