@@ -71,16 +71,24 @@ function createSVGElement(name) {
     return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 
+/* HTML-escape a string */
+function escapeHTML(str){
+    return new Option(str).innerHTML;
+}
+
 /* Update the height and width of the SVG with the global variable values. */
 function updateDocumentSize() {
     const pageDiv = document.getElementById('current-page');
     const pageSVG = document.getElementById('current-page-svg');
+    const backgroundFill = document.getElementById('background-fill');
     pageDiv.style.width = appendPx(documentWidth * scale + 2);
     pageDiv.style.height = appendPx(documentHeight * scale + 2);
     pageSVG.style.width = appendPx(documentWidth * scale);
     pageSVG.style.height = appendPx(documentHeight * scale);
     pageSVG.setAttribute('width', documentWidth * scale);
     pageSVG.setAttribute('height', documentHeight * scale);
+    backgroundFill.setAttribute('width', documentWidth * scale);
+    backgroundFill.setAttribute('height', documentHeight * scale);
 }
 
 /* Update the page margins in the SVG with the global variable values. */
@@ -143,7 +151,7 @@ function updatePuzzleContents() {
             // Make a circle for each letter of the word
             const circle = createSVGElement('circle');
             circle.setAttribute('stroke', 'black');
-            circle.setAttribute('fill', 'rgba(255, 255, 255, 0.5)');
+            circle.setAttribute('fill', 'white');
             circle.classList.add('circle', `row${i}`, `col${j}`);
             row.appendChild(circle)
             // Add pre-filled letters
@@ -189,6 +197,7 @@ function updatePuzzleGeometry() {
             + (1 - pictureScale) / 2 * circleSize
         ));
         picture.setAttribute('width', circleSize * pictureScale * scale);
+        picture.setAttribute('height', circleSize * pictureScale * scale);
         for (let j = 0; j < wordLength; j++) {
             const circle = document.querySelector(`.circle.row${i}.col${j}`);
             circle.setAttribute('cx', scale * (
@@ -234,8 +243,7 @@ function updatePuzzleGeometry() {
 
 /* Set the background color of the puzzle to the given color */
 function setBackgroundColor(color) {
-    document.getElementById('current-page-svg')
-        .style.backgroundColor = color;
+    document.getElementById('background-fill').setAttribute('fill', color);
     document.documentElement.style.setProperty('--bg-color', color);
 }
 
@@ -243,7 +251,7 @@ function setBackgroundColor(color) {
 function setLetterColor(color) {
     document.documentElement.style.setProperty('--letter-color', color);
     document.querySelectorAll('.letter').forEach(letter => {
-        letter.style.fill = color;
+        letter.setAttribute('fill', color);
     })
 }
 
@@ -367,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('change', editWordCallback);
     }
     // Shuffle button functinality
-    document.querySelector('.shuffle-words').addEventListener('click', () => {
+    document.getElementById('shuffle-words').addEventListener('click', () => {
         shuffle(wordList);
         for (let i = 0; i < wordList.length; i++) {
             const input = document.querySelector(`#word-list input.row${i}`);
@@ -377,4 +385,18 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
     // ----- DOWNLOAD SVG IMAGE -----
+    // Get svg element.
+    const svg = document.getElementById('current-page-svg');
+    // Get svg source.
+    const serializer = new XMLSerializer();
+    let source = serializer.serializeToString(svg);
+    // Add xml declaration
+    source = '<?xml version="1.0" encoding="UTF-8"?>' + source;
+    // Set url value to a element's href attribute.
+    document.getElementById('download').addEventListener('click', () => {
+        const paragraph = document.createElement('p');
+        paragraph.innerHTML = escapeHTML(source);
+        document.body.appendChild(paragraph);
+    })
+    // You can download svg file by right click menu.
 })

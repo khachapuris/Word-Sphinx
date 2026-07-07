@@ -116,11 +116,11 @@ button:hover {
     color: white;
 }
 
-.shuffle-words {
+#shuffle-words {
     width: 66%;
 }
 
-.download {
+#download {
     width: 100%;
 }
 
@@ -166,7 +166,7 @@ main {
 
 .letter {
     font-family: 'Short Stack';
-    fill: var(--letter-color);
+    /* fill: var(--letter-color); */
 }
 
 .large-screens-only {
