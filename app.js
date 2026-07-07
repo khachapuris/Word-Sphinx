@@ -71,11 +71,6 @@ function createSVGElement(name) {
     return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 
-/* HTML-escape a string */
-function escapeHTML(str){
-    return new Option(str).innerHTML;
-}
-
 /* Update the height and width of the SVG with the global variable values. */
 function updateDocumentSize() {
     const pageDiv = document.getElementById('current-page');
@@ -128,7 +123,7 @@ function updatePageMargins() {
  *
  * Note that this erases all geometry set on the puzzle, as all elements
  * are deleted and then created again. */
-function updatePuzzleContents() {
+function rebuildPuzzleContents() {
 
     // First, erase all previous groups and objects
     document.getElementById('current-page-content').remove();
@@ -278,7 +273,7 @@ function editWordCallback(changeEvent) {
     if (i == wordNumber) {
         // Add an element
         wordList.push(input.value);
-        updatePuzzleContents();
+        rebuildPuzzleContents();
         updatePuzzleGeometry();
         const newLi = document.createElement('li');
         const newInput = document.createElement('input');
@@ -299,7 +294,7 @@ function editWordCallback(changeEvent) {
             shiftInput.classList.remove(`row${shift}`);
             shiftInput.classList.add(`row${shift - 1}`);
         }
-        updatePuzzleContents();
+        rebuildPuzzleContents();
         updatePuzzleGeometry();
     } else {
         // Change an element
@@ -341,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
     documentHeight = parseFloat(selectedHeight);
     updateDocumentSize();
     updatePageMargins();
-    updatePuzzleContents();
+    rebuildPuzzleContents();
     updatePuzzleGeometry();
     setLetterColor(document.getElementById('letter-color').value);
 
