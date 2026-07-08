@@ -74,12 +74,12 @@
     <main>
       <div id="current-page" class="current-page">
         <svg
-          id="current-page-svg"
+          class="svg"
           width="420" height="594"
           xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0" y="0" width="420" height="594"
-            id="background-fill"></rect>
+            class="background-fill"></rect>
           <line
             x1="0" y1="50.8" x2="420" y2="50.8"
             class="margin-hl-line"
@@ -128,10 +128,17 @@
             class="margin-line"
             id="bottom-margin-line"></line>
 
-          <g id="current-page-content"></g>
+          <g class="page-content"></g>
         </svg>
       </div>
     </main>
+
+    <div id="ready-puzzle" hidden>
+      <svg
+        class="svg"
+        xmlns="http://www.w3.org/2000/svg">
+      </svg>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
 

@@ -45,6 +45,7 @@ if (wordListJSON !== null) {
     wordList = JSON.parse(wordListJSON);
 }
 
+// ------ UTILITY FUNCTIONS -----
 /* Shuffle an array randomly */
 function shuffle(array) {
   let currentIndex = array.length;
@@ -72,12 +73,11 @@ function createSVGElement(name) {
 }
 
 /* Update the height and width of the SVG with the global variable values. */
-function updateDocumentSize() {
-    const pageDiv = document.getElementById('current-page');
-    const pageSVG = document.getElementById('current-page-svg');
-    const backgroundFill = document.getElementById('background-fill');
-    pageDiv.style.width = appendPx(documentWidth * scale + 2);
-    pageDiv.style.height = appendPx(documentHeight * scale + 2);
+function updateDocumentSize(page) {
+    const pageSVG = page.querySelector('.svg');
+    const backgroundFill = page.querySelector('.background-fill');
+    page.style.width = appendPx(documentWidth * scale + 2);
+    page.style.height = appendPx(documentHeight * scale + 2);
     pageSVG.style.width = appendPx(documentWidth * scale);
     pageSVG.style.height = appendPx(documentHeight * scale);
     pageSVG.setAttribute('width', documentWidth * scale);
@@ -123,18 +123,18 @@ function updatePageMargins() {
  *
  * Note that this erases all geometry set on the puzzle, as all elements
  * are deleted and then created again. */
-function rebuildPuzzleContents() {
+function rebuildPuzzleContents(page) {
 
     // First, erase all previous groups and objects
-    document.getElementById('current-page-content').remove();
+    page.querySelector('.page-content').remove();
     const pageContent = createSVGElement('g');
-    pageContent.id = 'current-page-content';
-    document.getElementById('current-page-svg').appendChild(pageContent);
+    pageContent.classList.add('page-content');
+    page.querySelector('.svg').appendChild(pageContent);
 
     for (let i = 0; i < wordList.length; i++) {
         // Create a group for each row
         const row = createSVGElement('g');
-        row.id = `row${i}-group`;
+        row.classList.add(`row${i}-group`);
         pageContent.appendChild(row);
         // Add a picture
         const picture = createSVGElement('image');
@@ -161,7 +161,7 @@ function rebuildPuzzleContents() {
 }
 
 /* Update the puzzle's geometry with the global variable values. */
-function updatePuzzleGeometry() {
+function updatePuzzleGeometry(page) {
     const availableWidth = documentWidth
         - marginLeft
         - marginRight
@@ -183,7 +183,7 @@ function updatePuzzleGeometry() {
 
     // Update each picture and circle
     for (let i = 0; i < wordList.length; i++) {
-        const picture = document.querySelector(`.picture.row${i}`);
+        const picture = page.querySelector(`.picture.row${i}`);
         picture.setAttribute('x', (marginLeft + paddingLeft) * scale);
         picture.setAttribute('y', scale * (
             marginTop
@@ -194,7 +194,7 @@ function updatePuzzleGeometry() {
         picture.setAttribute('width', circleSize * pictureScale * scale);
         picture.setAttribute('height', circleSize * pictureScale * scale);
         for (let j = 0; j < wordLength; j++) {
-            const circle = document.querySelector(`.circle.row${i}.col${j}`);
+            const circle = page.querySelector(`.circle.row${i}.col${j}`);
             circle.setAttribute('cx', scale * (
                 marginLeft
                 + paddingLeft
@@ -212,7 +212,7 @@ function updatePuzzleGeometry() {
             circle.setAttribute('r', scale * circleRadius);
             circle.setAttribute('stroke-width',
                 circleSize * strokeThickness * scale);
-            const letter = document.querySelector(`.letter.row${i}.col${j}`);
+            const letter = page.querySelector(`.letter.row${i}.col${j}`);
             letter.setAttribute('x', scale * (
                 marginLeft
                 + paddingLeft
@@ -237,26 +237,26 @@ function updatePuzzleGeometry() {
 }
 
 /* Set the background color of the puzzle to the given color */
-function setBackgroundColor(color) {
-    document.getElementById('background-fill').setAttribute('fill', color);
-    document.documentElement.style.setProperty('--bg-color', color);
+function setBackgroundColor(page, color) {
+    page.querySelector('.background-fill').setAttribute('fill', color);
+    page.style.setProperty('--bg-color', color);
 }
 
 /* Set the color of pre-filled letters in the puzzle to the given color */
-function setLetterColor(color) {
-    document.documentElement.style.setProperty('--letter-color', color);
-    document.querySelectorAll('.letter').forEach(letter => {
+function setLetterColor(page, color) {
+    page.style.setProperty('--letter-color', color);
+    page.querySelectorAll('.letter').forEach(letter => {
         letter.setAttribute('fill', color);
     })
 }
 
 /* Update the words and pictures in the puzzle to match the word list */
-function updatePuzzleWords() {
+function updatePuzzleWords(page) {
     for (let i = 0; i < wordList.length; i++) {
-        const picture = document.querySelector(`.picture.row${i}`);
+        const picture = page.querySelector(`.picture.row${i}`);
         picture.setAttribute('href', `pictures/${wordList[i]}.png`);
         for (let j = 0; j < wordLength; j++) {
-            const letter = document.querySelector(`.letter.row${i}.col${j}`);
+            const letter = page.querySelector(`.letter.row${i}.col${j}`);
             letter.innerHTML = hideLetter(wordList[i])[j].toUpperCase();
         }
     }
@@ -264,6 +264,7 @@ function updatePuzzleWords() {
 
 /* The callback to editing a word in the word list */
 function editWordCallback(changeEvent) {
+    const currentPage = document.getElementById('current-page');
     // Get the current index of the element
     const i = parseInt(Array.from(changeEvent.target.classList)
         .find(className => className.startsWith('row'))
@@ -273,8 +274,8 @@ function editWordCallback(changeEvent) {
     if (i == wordNumber) {
         // Add an element
         wordList.push(input.value);
-        rebuildPuzzleContents();
-        updatePuzzleGeometry();
+        rebuildPuzzleContents(currentPage);
+        updatePuzzleGeometry(currentPage);
         const newLi = document.createElement('li');
         const newInput = document.createElement('input');
         newInput.setAttribute('type', 'text');
@@ -294,18 +295,19 @@ function editWordCallback(changeEvent) {
             shiftInput.classList.remove(`row${shift}`);
             shiftInput.classList.add(`row${shift - 1}`);
         }
-        rebuildPuzzleContents();
-        updatePuzzleGeometry();
+        rebuildPuzzleContents(currentPage);
+        updatePuzzleGeometry(currentPage);
     } else {
         // Change an element
         wordList[i] = input.value;
-        updatePuzzleWords();
+        updatePuzzleWords(currentPage);
     }
     localStorage.setItem('wordList', JSON.stringify(wordList));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     // ------- GENERAL SET UP -------
+    const currentPage = document.getElementById('current-page');
     // Set up the color selector widget
     Coloris({
         alpha: false,
@@ -314,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- PUZZLE INITIAL VALUES ---
     // Set the page color to the color currently selected in the dialog
-    setBackgroundColor(document.getElementById('bg-color').value);
+    setBackgroundColor(currentPage, document.getElementById('bg-color').value);
     // Update the inputs to match the restored word list
     for (let i = 0; i <= wordList.length; i++) {
         const li = document.createElement('li');
@@ -334,21 +336,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const [selectedWidth, selectedHeight] = selectedValue;
     documentWidth = parseFloat(selectedWidth);
     documentHeight = parseFloat(selectedHeight);
-    updateDocumentSize();
-    updatePageMargins();
-    rebuildPuzzleContents();
-    updatePuzzleGeometry();
-    setLetterColor(document.getElementById('letter-color').value);
+    updateDocumentSize(currentPage);
+    updatePageMargins(currentPage);
+    rebuildPuzzleContents(currentPage);
+    updatePuzzleGeometry(currentPage);
+    setLetterColor(currentPage, document.getElementById('letter-color').value);
 
     // --- PUZZLE DYNAMIC CONTROLS --
     // Change page color when a new color is selected
     document.addEventListener('coloris:pick', pickEvent => {
         switch (pickEvent.detail.currentEl.id) {
             case 'bg-color':
-                setBackgroundColor(pickEvent.detail.color);
+                setBackgroundColor(currentPage, pickEvent.detail.color);
                 break;
             case 'letter-color':
-                setLetterColor(pickEvent.detail.color);
+                setLetterColor(currentPage, pickEvent.detail.color);
                 break;
         }
     })
@@ -360,9 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
         documentWidth = parseFloat(selectedWidth);
         documentHeight = parseFloat(selectedHeight);
         console.log(documentWidth, documentHeight);
-        updateDocumentSize();
-        updatePageMargins();
-        updatePuzzleGeometry();
+        updateDocumentSize(currentPage);
+        updatePageMargins(currentPage);
+        updatePuzzleGeometry(currentPage);
     })
     // Edit the word list interactively
     for (let i = 0; i <= wordList.length; i++) {
@@ -376,12 +378,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.querySelector(`#word-list input.row${i}`);
             input.value = wordList[i];
         }
-        updatePuzzleWords();
+        updatePuzzleWords(currentPage);
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
     // ----- DOWNLOAD SVG IMAGE -----
     document.getElementById('download').addEventListener('click', () => {
-        const svgElement = document.getElementById('current-page-svg');
+        const svgElement = currentPage.querySelector('svg');
         // Get the source text of the SVG element using XML serializer
         const serializer = new XMLSerializer();
         let source = serializer.serializeToString(svgElement);
