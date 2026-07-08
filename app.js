@@ -1,6 +1,7 @@
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
-let globalScale = 60;
+let previewScale = 60;
+let downloadScale = 300;
 // The following values are in inches
 let documentWidth = 8.27;
 let documentHeight = 11.69;
@@ -322,7 +323,7 @@ function createWordCallbackFunction(puzzle) {
 document.addEventListener('DOMContentLoaded', () => {
     // ------- GENERAL SET UP -------
     const currentPage = document.getElementById('current-page');
-    const preview = new Puzzle(currentPage, globalScale);
+    const preview = new Puzzle(currentPage, previewScale);
     const editWordCallback = createWordCallbackFunction(preview);
 
     // Set up the color selector widget
@@ -400,7 +401,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // ----- DOWNLOAD SVG IMAGE -----
     document.getElementById('download').addEventListener('click', () => {
-        const svgElement = currentPage.querySelector('svg');
+        // Create a separate puzzle suitable for download
+        const readyPage = document.getElementById('ready-page');
+        const readyPuzzle = new Puzzle(readyPage, downloadScale);
+        readyPuzzle.setBackgroundColor(
+            document.getElementById('bg-color').value);
+        readyPuzzle.updateDocumentSize();
+        readyPuzzle.rebuildPuzzleContents();
+        readyPuzzle.updatePuzzleGeometry();
+        readyPuzzle.setLetterColor(
+            document.getElementById('letter-color').value);
+        // Get the generated SVG element
+        const svgElement = readyPage.querySelector('svg');
         // Get the source text of the SVG element using XML serializer
         const serializer = new XMLSerializer();
         let source = serializer.serializeToString(svgElement);
