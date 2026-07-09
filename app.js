@@ -206,6 +206,7 @@ class Puzzle {
                     + (Math.random() * 2 - 1) * letterRandomOffset
                 ));
                 letter.style.fontSize = appendPx(letterScale * circleSize * this.scale);
+                letter.style.fontFamily = 'Short Stack';
                 // Add a personal touch to each letter
                 letter.setAttribute('rotate',
                     (Math.random() * 2 - 1) * letterRandomRotation);

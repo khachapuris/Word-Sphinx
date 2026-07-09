@@ -164,11 +164,6 @@ main {
     stroke: red;
 }
 
-.letter {
-    font-family: 'Short Stack';
-    /* fill: var(--letter-color); */
-}
-
 .large-screens-only {
     font-family: inherit;
 }
