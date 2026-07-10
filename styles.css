@@ -42,13 +42,18 @@ aside {
     height: calc(100% - 60px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .input-group {
     margin-bottom: 20px;
     width: 100%;
+    flex-grow: 0px;
     /* border: 1px solid red; */
+}
+
+.spacing-separator {
+    flex-grow: 1;
 }
 
 label {
@@ -168,8 +173,48 @@ main {
     font-family: inherit;
 }
 
-@media(max-width: 900px) {
+.small-screens-only {
+    display: none;
+}
+
+@media(max-width: 1010px) {
     .large-screens-only {
         display: none;
+    }
+    .small-screens-only {
+        display: inline;
+        font-family: inherit;
+    }
+    aside {
+        width: 100vw;
+        height: unset;
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        gap: 20px;
+    }
+    aside .input-group {
+        margin-bottom: 0;
+        flex-grow: 1;
+    }
+    label:has(+#word-list) {
+        display: none;
+    }
+    #word-list {
+        margin-top: 0;
+        padding-left: 20%;
+    }
+    #word-list input {
+        width: 100%;
+    }
+    #shuffle-words {
+        width: 100%;
+    }
+    aside .spacing-separator {
+        display: none;
+    }
+    main {
+        width: 100vw;
+        height: 100vh;
     }
 }
