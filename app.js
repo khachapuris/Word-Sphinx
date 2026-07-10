@@ -1,7 +1,12 @@
+// ------ SYSTEM PARAMETERS -----
+// NOTE: Replace this with the global path so the pictures in the downloaded
+// document would be rendered correctly
+const pathToPictures = 'pictures'
+
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
 let previewScale = 60;
-let downloadScale = 300;
+let downloadScale = 600;
 // The following values are in inches
 let documentWidth = 8.27;
 let documentHeight = 11.69;
@@ -25,7 +30,25 @@ let strokeThickness = 0.035;
 let wordLength = 3;
 // These values are boolean
 let insideIsLeft = true;
+// These variables represent default values of data saved between sessions
+let wordList = ['cat', 'hat', 'rat', 'bat'];
+let bgColor = '#ffffff';
+let letterColor = '#808080';
 
+// ----- RESTORE CACHED DATA ----
+let wordListStored = localStorage.getItem('wordList');
+if (wordListStored !== null) {
+    wordList = JSON.parse(wordListStored);
+}
+let bgColorStored = localStorage.getItem('bgColor');
+if (bgColor !== null) {
+    bgColor = bgColorStored;
+}
+let letterColorStored = localStorage.getItem('letterColor');
+if (letterColor !== null) {
+    letterColor = letterColorStored;
+}
+//
 // Assign page-orientation dependent values for easier use in calculations
 let marginTop = marginOutside;
 let marginBottom = marginOutside;
@@ -37,13 +60,6 @@ if (insideIsLeft) {
 } else {
     marginLeft = marginOutside;
     marginRight = marginInside;
-}
-
-// ------- PUZZLE CONTENT -------
-let wordListJSON = localStorage.getItem('wordList');
-let wordList = ['cat', 'hat', 'rat', 'bat'];
-if (wordListJSON !== null) {
-    wordList = JSON.parse(wordListJSON);
 }
 
 // ------ UTILITY FUNCTIONS -----
@@ -58,7 +74,7 @@ function shuffle(array) {
   }
 }
 
-/* Replace the first character of the given word with a space */
+/* Replace the first character of the given word with a space. */
 function hideLetter(word) {
     return word.replace(/^./, ' ');
 }
@@ -68,11 +84,12 @@ function appendPx(n) {
     return `${n}px`
 }
 
-/* Create an SVG element by its name */
+/* Create an SVG element by its name. */
 function createSVGElement(name) {
     return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 
+// --- PUZZLE RENDERING CLASS ---
 class Puzzle {
     page;
     scale;
@@ -116,7 +133,7 @@ class Puzzle {
             // Add a picture
             const picture = createSVGElement('image');
             picture.classList.add('picture', `row${i}`);
-            picture.setAttribute('href', `pictures/${wordList[i]}.png`);
+            picture.setAttribute('href', `${pathToPictures}/${wordList[i]}.png`);
             row.appendChild(picture);
 
             for (let j = 0; j < wordLength; j++) {
@@ -215,16 +232,16 @@ class Puzzle {
     }
 
     /* Set the background color of the puzzle to the given color */
-    setBackgroundColor(color) {
-        this.page.querySelector('.background-fill').setAttribute('fill', color);
-        this.page.style.setProperty('--bg-color', color);
+    setBackgroundColor() {
+        this.page.querySelector('.background-fill').setAttribute('fill', bgColor);
+        this.page.style.setProperty('--bg-color', bgColor);
     }
 
     /* Set the color of pre-filled letters in the puzzle to the given color */
-    setLetterColor(color) {
-        this.page.style.setProperty('--letter-color', color);
+    setLetterColor() {
+        this.page.style.setProperty('--letter-color', letterColor);
         this.page.querySelectorAll('.letter').forEach(letter => {
-            letter.setAttribute('fill', color);
+            letter.setAttribute('fill', letterColor);
         })
     }
 
@@ -232,7 +249,7 @@ class Puzzle {
     updatePuzzleWords() {
         for (let i = 0; i < wordList.length; i++) {
             const picture = this.page.querySelector(`.picture.row${i}`);
-            picture.setAttribute('href', `pictures/${wordList[i]}.png`);
+            picture.setAttribute('href', `${pathToPictures}/${wordList[i]}.png`);
             for (let j = 0; j < wordLength; j++) {
                 const letter = this.page.querySelector(`.letter.row${i}.col${j}`);
                 letter.innerHTML = hideLetter(wordList[i])[j].toUpperCase();
@@ -289,6 +306,7 @@ function createWordCallbackFunction(puzzle) {
             wordList.push(input.value);
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
+            puzzle.setLetterColor();
             const newLi = document.createElement('li');
             const newInput = document.createElement('input');
             newInput.setAttribute('type', 'text');
@@ -310,6 +328,7 @@ function createWordCallbackFunction(puzzle) {
             }
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
+            puzzle.setLetterColor();
         } else {
             // Change an element
             wordList[i] = input.value;
@@ -334,8 +353,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // ---- PUZZLE INITIAL VALUES ---
-    // Set the page color to the color currently selected in the dialog
-    preview.setBackgroundColor(document.getElementById('bg-color').value);
+    // Set up the color dialogs' selected colors
+    console.log(bgColor, letterColor);
+    const bgColorInput = document.getElementById('bg-color');
+    const letterColorInput = document.getElementById('letter-color');
+    bgColorInput.value = bgColor;
+    letterColorInput.value = letterColor;
+    bgColorInput.dispatchEvent(new Event('input', { bubbles: true }));
+    letterColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     // Update the inputs to match the restored word list
     for (let i = 0; i <= wordList.length; i++) {
         const li = document.createElement('li');
@@ -355,21 +380,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const [selectedWidth, selectedHeight] = selectedValue;
     documentWidth = parseFloat(selectedWidth);
     documentHeight = parseFloat(selectedHeight);
+    preview.setBackgroundColor();
     preview.updateDocumentSize();
     preview.updatePageMargins();
     preview.rebuildPuzzleContents();
     preview.updatePuzzleGeometry();
-    preview.setLetterColor(document.getElementById('letter-color').value);
+    preview.setLetterColor();
 
     // --- PUZZLE DYNAMIC CONTROLS --
     // Change page color when a new color is selected
     document.addEventListener('coloris:pick', pickEvent => {
         switch (pickEvent.detail.currentEl.id) {
             case 'bg-color':
-                preview.setBackgroundColor(pickEvent.detail.color);
+                bgColor = pickEvent.detail.color;
+                preview.setBackgroundColor();
+                localStorage.setItem('bgColor', bgColor);
                 break;
             case 'letter-color':
-                preview.setLetterColor(pickEvent.detail.color);
+                letterColor = pickEvent.detail.color;
+                preview.setLetterColor();
+                localStorage.setItem('letterColor', letterColor);
                 break;
         }
     })
@@ -405,13 +435,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create a separate puzzle suitable for download
         const readyPage = document.getElementById('ready-page');
         const readyPuzzle = new Puzzle(readyPage, downloadScale);
-        readyPuzzle.setBackgroundColor(
-            document.getElementById('bg-color').value);
+        readyPuzzle.setBackgroundColor();
         readyPuzzle.updateDocumentSize();
         readyPuzzle.rebuildPuzzleContents();
         readyPuzzle.updatePuzzleGeometry();
-        readyPuzzle.setLetterColor(
-            document.getElementById('letter-color').value);
+        readyPuzzle.setLetterColor();
         // Get the generated SVG element
         const svgElement = readyPage.querySelector('svg');
         // Get the source text of the SVG element using XML serializer
