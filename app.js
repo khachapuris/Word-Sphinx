@@ -63,7 +63,7 @@ if (insideIsLeft) {
 }
 
 // ------ UTILITY FUNCTIONS -----
-/* Shuffle an array randomly */
+/* Shuffle an array randomly. */
 function shuffle(array) {
   let currentIndex = array.length;
   while (currentIndex != 0) {
@@ -89,12 +89,13 @@ function createSVGElement(name) {
     return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 
-// --- PUZZLE RENDERING CLASS ---
+// ------ PUZZLE RENDERING ------
+/* Class for rendering SVG puzzles based on the defined global variables. */
 class Puzzle {
-    page;
-    scale;
+    page; // the HTML element used to display the page
+    scale; // the scale of the puzzle in pixels per inch
 
-    /* The constructor for the class */
+    /* The constructor for the class. */
     constructor(page, scale) {
         this.page = page;
         this.scale = scale;
@@ -231,13 +232,13 @@ class Puzzle {
         }
     }
 
-    /* Set the background color of the puzzle to the given color */
+    /* Set the background color of the puzzle to the given color. */
     setBackgroundColor() {
         this.page.querySelector('.background-fill').setAttribute('fill', bgColor);
         this.page.style.setProperty('--bg-color', bgColor);
     }
 
-    /* Set the color of pre-filled letters in the puzzle to the given color */
+    /* Set the color of pre-filled letters in the puzzle to the given color. */
     setLetterColor() {
         this.page.style.setProperty('--letter-color', letterColor);
         this.page.querySelectorAll('.letter').forEach(letter => {
@@ -245,7 +246,7 @@ class Puzzle {
         })
     }
 
-    /* Update the words and pictures in the puzzle to match the word list */
+    /* Update the words and pictures in the puzzle to match the word list. */
     updatePuzzleWords() {
         for (let i = 0; i < wordList.length; i++) {
             const picture = this.page.querySelector(`.picture.row${i}`);
@@ -291,7 +292,7 @@ class Puzzle {
     }
 }
 
-/* Create a callback for editing a word in the word list */
+/* Create a callback for editing a word in the word list. */
 function createWordCallbackFunction(puzzle) {
 
     function callback(changeEvent) {
@@ -430,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.updatePuzzleWords();
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
+
     // ----- DOWNLOAD SVG IMAGE -----
     document.getElementById('download').addEventListener('click', () => {
         // Create a separate puzzle suitable for download
