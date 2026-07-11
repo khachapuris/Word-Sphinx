@@ -108,7 +108,7 @@ class Puzzle {
         this.scale = scale;
     }
 
-    /* Update the height and width of the SVG with the global variable values. */
+    /* Update the height and width of the SVG with global variable values. */
     updateDocumentSize() {
         const pageSVG = this.page.querySelector('.svg');
         const backgroundFill = this.page.querySelector('.background-fill');
@@ -141,7 +141,8 @@ class Puzzle {
             // Add a picture
             const picture = createSVGElement('image');
             picture.classList.add('picture', `row${i}`);
-            picture.setAttribute('href', `${pathToPictures}/${wordList[i]}.png`);
+            picture.setAttribute('href',
+                `${pathToPictures}/${wordList[i]}.png`);
             row.appendChild(picture);
 
             for (let j = 0; j < wordLength; j++) {
@@ -193,10 +194,17 @@ class Puzzle {
                 + i * (1+gapVertical) * circleSize
                 + (1 - pictureScale) / 2 * circleSize
             ));
-            picture.setAttribute('width', circleSize * pictureScale * this.scale);
-            picture.setAttribute('height', circleSize * pictureScale * this.scale);
+            picture.setAttribute('width',
+                circleSize
+                * pictureScale
+                * this.scale);
+            picture.setAttribute('height',
+                circleSize
+                * pictureScale
+                * this.scale);
             for (let j = 0; j < wordLength; j++) {
-                const circle = this.page.querySelector(`.circle.row${i}.col${j}`);
+                const circle = this.page
+                    .querySelector(`.circle.row${i}.col${j}`);
                 circle.setAttribute('cx', this.scale * (
                     marginLeft
                     + paddingLeft
@@ -214,7 +222,8 @@ class Puzzle {
                 circle.setAttribute('r', this.scale * circleRadius);
                 circle.setAttribute('stroke-width',
                     circleSize * strokeThickness * this.scale);
-                const letter = this.page.querySelector(`.letter.row${i}.col${j}`);
+                const letter = this.page
+                    .querySelector(`.letter.row${i}.col${j}`);
                 letter.setAttribute('x', this.scale * (
                     marginLeft
                     + paddingLeft
@@ -230,7 +239,10 @@ class Puzzle {
                     + circleRadius
                     + (Math.random() * 2 - 1) * letterRandomOffset
                 ));
-                letter.style.fontSize = appendPx(letterScale * circleSize * this.scale);
+                letter.style.fontSize = appendPx(
+                    letterScale
+                    * circleSize
+                    * this.scale);
                 letter.style.fontFamily = 'Short Stack';
                 // Add a personal touch to each letter
                 letter.setAttribute('rotate',
@@ -241,8 +253,9 @@ class Puzzle {
 
     /* Set the background color of the puzzle to the given color. */
     setBackgroundColor() {
-        this.page.querySelector('.background-fill').setAttribute('fill', bgColor);
         this.page.style.setProperty('--bg-color', bgColor);
+        this.page.querySelector('.background-fill')
+            .setAttribute('fill', bgColor);
     }
 
     /* Set the color of pre-filled letters in the puzzle to the given color. */
@@ -257,9 +270,11 @@ class Puzzle {
     updatePuzzleWords() {
         for (let i = 0; i < wordList.length; i++) {
             const picture = this.page.querySelector(`.picture.row${i}`);
-            picture.setAttribute('href', `${pathToPictures}/${wordList[i]}.png`);
+            picture.setAttribute('href',
+                `${pathToPictures}/${wordList[i]}.png`);
             for (let j = 0; j < wordLength; j++) {
-                const letter = this.page.querySelector(`.letter.row${i}.col${j}`);
+                const letter = this.page
+                    .querySelector(`.letter.row${i}.col${j}`);
                 letter.innerHTML = hideLetter(wordList[i])[j].toUpperCase();
             }
         }
@@ -279,22 +294,26 @@ class Puzzle {
             this.page.querySelector('.margin-hl-line.bottom'),
         ]];
         for (const [topLine, leftLine, rightLine, bottomLine] of lines) {
-            topLine.setAttribute('y1', marginTop * this.scale)
-            topLine.setAttribute('y2', marginTop * this.scale)
-            topLine.setAttribute('x1', 0)
-            topLine.setAttribute('x2', documentWidth * this.scale)
-            leftLine.setAttribute('x1', marginLeft * this.scale)
-            leftLine.setAttribute('x2', marginLeft * this.scale)
-            leftLine.setAttribute('y1', 0)
-            leftLine.setAttribute('y2', documentHeight * this.scale)
-            rightLine.setAttribute('x1', (documentWidth - marginRight) * this.scale)
-            rightLine.setAttribute('x2', (documentWidth - marginRight) * this.scale)
-            rightLine.setAttribute('y1', 0)
-            rightLine.setAttribute('y2', documentHeight * this.scale)
-            bottomLine.setAttribute('y1', (documentHeight - marginBottom) * this.scale)
-            bottomLine.setAttribute('y2', (documentHeight - marginBottom) * this.scale)
-            bottomLine.setAttribute('x1', 0)
-            bottomLine.setAttribute('x2', documentWidth * this.scale)
+            topLine.setAttribute('y1', marginTop * this.scale);
+            topLine.setAttribute('y2', marginTop * this.scale);
+            topLine.setAttribute('x1', 0);
+            topLine.setAttribute('x2', documentWidth * this.scale);
+            leftLine.setAttribute('x1', marginLeft * this.scale);
+            leftLine.setAttribute('x2', marginLeft * this.scale);
+            leftLine.setAttribute('y1', 0);
+            leftLine.setAttribute('y2', documentHeight * this.scale);
+            rightLine.setAttribute('x1',
+                (documentWidth - marginRight) * this.scale);
+            rightLine.setAttribute('x2',
+                (documentWidth - marginRight) * this.scale);
+            rightLine.setAttribute('y1', 0);
+            rightLine.setAttribute('y2', documentHeight * this.scale);
+            bottomLine.setAttribute('y1',
+                (documentHeight - marginBottom) * this.scale);
+            bottomLine.setAttribute('y2',
+                (documentHeight - marginBottom) * this.scale);
+            bottomLine.setAttribute('x1', 0);
+            bottomLine.setAttribute('x2', documentWidth * this.scale);
         }
     }
 }
@@ -326,7 +345,8 @@ function createWordCallbackFunction(puzzle) {
             // Remove an element
             wordList.splice(i, 1);
             console.log(wordList);
-            document.querySelector(`#word-list li:has(input.row${i})`).remove();
+            document.querySelector(`#word-list li:has(input.row${i})`)
+                .remove();
             // Shift all list item indices after the removed element one down
             for (let shift = i + 1; shift <= wordNumber; shift++) {
                 const shiftInput = document.querySelector(
