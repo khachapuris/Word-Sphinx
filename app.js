@@ -36,6 +36,7 @@ let insideIsLeft = true;
 let wordList = ['cat', 'hat', 'rat', 'bat'];
 let bgColor = '#ffffff';
 let letterColor = '#808080';
+let documentSize = '8.27x11.69';
 
 // ----- RESTORE CACHED DATA ----
 let wordListStored = localStorage.getItem('wordList');
@@ -50,7 +51,11 @@ let letterColorStored = localStorage.getItem('letterColor');
 if (letterColor !== null) {
     letterColor = letterColorStored;
 }
-//
+let documentSizeStored = localStorage.getItem('documentSize');
+if (documentSizeStored !== null) {
+    documentSize = documentSizeStored;
+}
+
 // Assign page-orientation dependent values for easier use in calculations
 let marginTop = marginOutside;
 let marginBottom = marginOutside;
@@ -348,12 +353,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentPage = document.getElementById('current-page');
     const preview = new Puzzle(currentPage, previewScale);
     const editWordCallback = createWordCallbackFunction(preview);
+    const smallScreens = window.matchMedia('(width < 1100px)');
+    const tinyScreens = window.matchMedia('(width < 510px)');
 
     // Set up the color selector widget
     Coloris({
         alpha: false,
         theme: 'polaroid',
-    })
+    });
+
+    /* Resize the puzzle according to the screen size */
+    function adjustPreviewScale() {
+        if (tinyScreens.matches) {
+            preview.scale = tinyScreensPreviewScale;
+        } else if (smallScreens.matches) {
+            preview.scale = smallScreensPreviewScale;
+        } else {
+            preview.scale = previewScale;
+        }
+    }
 
     // ---- PUZZLE INITIAL VALUES ---
     // Set up the color dialogs' selected colors
@@ -377,19 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     console.log(wordList);
-    // Adjust the preview size on small screens
-    let smallScreens = window.matchMedia('(width < 1100px)');
-    let tinyScreens = window.matchMedia('(width < 510px)');
-    if (tinyScreens.matches) {
-        preview.scale = tinyScreensPreviewScale;
-    } else if (smallScreens.matches) {
-        preview.scale = smallScreensPreviewScale;
-    } else {
-        preview.scale = previewScale;
-    }
     // Update page dimensions
-    const selectedValue = document.getElementById('document-size')
-        .value.split('x');
+    document.getElementById('document-size').value = documentSize;
+    const selectedValue = documentSize.split('x');
     const [selectedWidth, selectedHeight] = selectedValue;
     documentWidth = parseFloat(selectedWidth);
     documentHeight = parseFloat(selectedHeight);
@@ -418,15 +426,15 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     // Change page dimensions when a new format is selected
     document.getElementById('document-size').addEventListener('change', () => {
-        const selectedValue = document.getElementById('document-size')
-            .value.split('x');
-        const [selectedWidth, selectedHeight] = selectedValue;
+        documentSize = document.getElementById('document-size').value;
+        const [selectedWidth, selectedHeight] = documentSize.split('x');
         documentWidth = parseFloat(selectedWidth);
         documentHeight = parseFloat(selectedHeight);
         console.log(documentWidth, documentHeight);
         preview.updateDocumentSize();
         preview.updatePageMargins();
         preview.updatePuzzleGeometry();
+        localStorage.setItem('documentSize', documentSize);
     })
     // Edit the word list interactively
     for (let i = 0; i <= wordList.length; i++) {
@@ -443,6 +451,20 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.updatePuzzleWords();
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
+
+    // ------ RESPONSIVE DESIGN -----
+    smallScreens.addEventListener('change', () => {
+        adjustPreviewScale()
+        preview.updateDocumentSize();
+        preview.updatePageMargins();
+        preview.updatePuzzleGeometry();
+    });
+    tinyScreens.addEventListener('change', () => {
+        adjustPreviewScale()
+        preview.updateDocumentSize();
+        preview.updatePageMargins();
+        preview.updatePuzzleGeometry();
+    })
 
     // ----- DOWNLOAD SVG IMAGE -----
     document.getElementById('download').addEventListener('click', () => {
@@ -474,30 +496,4 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
         document.body.removeChild(link);
     });
-
-    // ------ RESPONSIVE DESIGN -----
-    smallScreens.addEventListener('change', () => {
-        if (tinyScreens.matches) {
-            preview.scale = tinyScreensPreviewScale;
-        } else if (smallScreens.matches) {
-            preview.scale = smallScreensPreviewScale;
-        } else {
-            preview.scale = previewScale;
-        }
-        preview.updateDocumentSize();
-        preview.updatePageMargins();
-        preview.updatePuzzleGeometry();
-    });
-    tinyScreens.addEventListener('change', () => {
-        if (tinyScreens.matches) {
-            preview.scale = tinyScreensPreviewScale;
-        } else if (smallScreens.matches) {
-            preview.scale = smallScreensPreviewScale;
-        } else {
-            preview.scale = previewScale;
-        }
-        preview.updateDocumentSize();
-        preview.updatePageMargins();
-        preview.updatePuzzleGeometry();
-    })
 })
