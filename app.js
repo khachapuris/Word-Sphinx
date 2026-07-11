@@ -6,7 +6,8 @@ const pathToPictures = 'pictures'
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
 let previewScale = 60;
-let mobilePreviewScale = 35;
+let smallScreensPreviewScale = 40;
+let tinyScreensPreviewScale = 26;
 let downloadScale = 600;
 // The following values are in inches
 let documentWidth = 8.27;
@@ -377,9 +378,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     console.log(wordList);
     // Adjust the preview size on small screens
-    let smallScreens = window.matchMedia('(width < 1010px)');
-    if (smallScreens.matches) {
-        preview.scale = mobilePreviewScale;
+    let smallScreens = window.matchMedia('(width < 1100px)');
+    let tinyScreens = window.matchMedia('(width < 510px)');
+    if (tinyScreens.matches) {
+        preview.scale = tinyScreensPreviewScale;
+    } else if (smallScreens.matches) {
+        preview.scale = smallScreensPreviewScale;
     } else {
         preview.scale = previewScale;
     }
@@ -472,9 +476,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ------ RESPONSIVE DESIGN -----
-    smallScreens.addEventListener('change', (changeEvent) => {
-        if (changeEvent.matches) {
-            preview.scale = mobilePreviewScale;
+    smallScreens.addEventListener('change', () => {
+        if (tinyScreens.matches) {
+            preview.scale = tinyScreensPreviewScale;
+        } else if (smallScreens.matches) {
+            preview.scale = smallScreensPreviewScale;
+        } else {
+            preview.scale = previewScale;
+        }
+        preview.updateDocumentSize();
+        preview.updatePageMargins();
+        preview.updatePuzzleGeometry();
+    });
+    tinyScreens.addEventListener('change', () => {
+        if (tinyScreens.matches) {
+            preview.scale = tinyScreensPreviewScale;
+        } else if (smallScreens.matches) {
+            preview.scale = smallScreensPreviewScale;
         } else {
             preview.scale = previewScale;
         }

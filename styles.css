@@ -23,11 +23,13 @@ body {
 
 h1,h1 * {
     font-family: 'Short Stack';
-    font-size: 28px;
+    font-size: clamp(20px, 4vw, 32px);
+    overflow: hidden;
 }
 
 header {
     height: 60px;
+    min-height: 60px;
     width: 100vw;
     display: flex;
     align-items: center;
@@ -130,7 +132,7 @@ button:hover {
 }
 
 main {
-    width: clamp(600px, 70%, 1000px);
+    width: clamp(200px, calc(100vw - 300px), 1000px);
     height: calc(100% - 60px);
     display: flex;
     flex-direction: row;
@@ -177,7 +179,15 @@ main {
     display: none;
 }
 
-@media(max-width: 1010px) {
+.non-tiny-screens-only {
+    font-family: inherit;
+}
+
+.tiny-screens-only {
+    display: none;
+}
+
+@media(max-width: 800px) {
     .large-screens-only {
         display: none;
     }
@@ -188,7 +198,6 @@ main {
     body {
         display: flex;
         flex-direction: column;
-        flex-grow: 0 0 1;
         flex-wrap: nowrap;
     }
     aside {
@@ -237,5 +246,26 @@ main {
     main {
         height: 100%;
         width: 100vw;
+    }
+}
+
+@media (max-width: 500px) {
+    .non-tiny-screens-only {
+        display: none;
+    }
+    .tiny-screens-only {
+        display: inline;
+    }
+    aside {
+        padding: 20px 4%;
+        grid-template-rows: min-content 1fr min-content;
+        grid-template-columns: min-content min-content 1fr;
+        grid-template-areas: 
+            "dimensions dimensions words"
+            "bg-color letter-color words"
+            "download download words";
+    }
+    #word-list {
+        padding-left: 24px;
     }
 }
