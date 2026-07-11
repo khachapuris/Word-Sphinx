@@ -6,6 +6,7 @@ const pathToPictures = 'pictures'
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
 let previewScale = 60;
+let mobilePreviewScale = 35;
 let downloadScale = 600;
 // The following values are in inches
 let documentWidth = 8.27;
@@ -375,6 +376,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     console.log(wordList);
+    // Adjust the preview size on small screens
+    let smallScreens = window.matchMedia('(width < 1010px)');
+    if (smallScreens.matches) {
+        preview.scale = mobilePreviewScale;
+    } else {
+        preview.scale = previewScale;
+    }
     // Update page dimensions
     const selectedValue = document.getElementById('document-size')
         .value.split('x');
@@ -462,4 +470,16 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
         document.body.removeChild(link);
     });
+
+    // ------ RESPONSIVE DESIGN -----
+    smallScreens.addEventListener('change', (changeEvent) => {
+        if (changeEvent.matches) {
+            preview.scale = mobilePreviewScale;
+        } else {
+            preview.scale = previewScale;
+        }
+        preview.updateDocumentSize();
+        preview.updatePageMargins();
+        preview.updatePuzzleGeometry();
+    })
 })
