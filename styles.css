@@ -188,21 +188,36 @@ main {
     aside {
         width: 100vw;
         height: unset;
-        flex-direction: row;
         border-right: none;
         border-bottom: 1px solid #ddd;
         gap: 20px;
+        display: grid;
+        grid-template-rows: min-content 1fr min-content;
+        grid-template-columns: min-content min-content 1fr 2fr;
+        grid-template-areas: 
+            "dimensions dimensions dimensions words"
+            "bg-color letter-color . words"
+            "download download download words";
     }
     aside .input-group {
         margin-bottom: 0;
-        flex-grow: 1;
     }
-    label:has(+#word-list) {
+    .input-group.dimensions { grid-area: dimensions; }
+    .input-group.bg-color { grid-area: bg-color; }
+    .input-group.letter-color { grid-area: letter-color; }
+    .input-group.download { grid-area: download; }
+    .input-group.word-list {
+        grid-area: words;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .input-group.word-list label {
         display: none;
     }
     #word-list {
         margin-top: 0;
-        padding-left: 20%;
     }
     #word-list input {
         width: 100%;
