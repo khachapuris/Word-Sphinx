@@ -337,6 +337,7 @@ function createWordCallbackFunction(puzzle) {
             const newLi = document.createElement('li');
             const newInput = document.createElement('input');
             newInput.setAttribute('type', 'text');
+            newInput.setAttribute('list', 'words-datalist');
             newInput.classList.add(`row${i + 1}`);
             newInput.addEventListener('change', callback);
             document.getElementById('word-list').appendChild(newLi);
@@ -407,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.createElement('li');
         const input = document.createElement('input');
         input.setAttribute('type', 'text');
+        input.setAttribute('list', 'words-datalist');
         input.classList.add(`row${i}`);
         document.getElementById('word-list').appendChild(li);
         li.appendChild(input);
@@ -415,6 +417,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     console.log(wordList);
+    // Provide autocompletion options for the word list inputs
+    for (word of allWords) {
+        const option = document.createElement('option');
+        option.value = word;
+        document.getElementById('words-datalist').appendChild(option);
+    }
     // Update page dimensions
     document.getElementById('document-size').value = documentSize;
     const selectedValue = documentSize.split('x');
