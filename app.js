@@ -404,25 +404,29 @@ document.addEventListener('DOMContentLoaded', () => {
     bgColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     letterColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     // Update the inputs to match the restored word list
+    const wordListElement = document.getElementById('word-list');
     for (let i = 0; i <= wordList.length; i++) {
         const li = document.createElement('li');
         const input = document.createElement('input');
         input.setAttribute('type', 'text');
-        input.setAttribute('list', 'words-datalist');
+        input.setAttribute('list', `datalist-${i}`);
+        input.setAttribute('autocomplete', 'off');
         input.classList.add(`row${i}`);
-        document.getElementById('word-list').appendChild(li);
+        input.classList.add('awesomecomplete');
+        wordListElement.appendChild(li);
         li.appendChild(input);
         if (i < wordList.length) {
             input.value = wordList[i];
         }
+        // Provide autocompletion options for the word list inputs
+        const awesomplete = new Awesomplete(input, {
+            list: allWords,
+            minChars: 1,
+            maxItems: allWords.length,
+        });
+        awesomplete.list = allWords;
     }
     console.log(wordList);
-    // Provide autocompletion options for the word list inputs
-    for (word of allWords) {
-        const option = document.createElement('option');
-        option.value = word;
-        document.getElementById('words-datalist').appendChild(option);
-    }
     // Update page dimensions
     document.getElementById('document-size').value = documentSize;
     const selectedValue = documentSize.split('x');

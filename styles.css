@@ -109,6 +109,12 @@ input[data-coloris] {
     border: 1px solid #8888ff;
 }
 
+.awesomplete > ul {
+    transition-duration: 20ms;
+    max-height: 33vh;
+    overflow: scroll;
+}
+
 button {
     padding: 5px;
     background-color: #eee;

@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Puzzle book generator</title>
-    <link rel="stylesheet" href="styles.css">
 
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.7/awesomplete.min.css"
+      integrity="sha512-YKJCE4m/eXP9bG0UEQp6Y4It4J1byWp9gN4vxtD4QHuUm26JV7D2Vue2CDrBjQvcRy3mKxlwgrGV+d4j7EZB8Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header>
@@ -74,7 +81,6 @@
       <div class="input-group word-list">
         <label>Edit the word list</label>
         <ul id="word-list"></ul>
-        <datalist id="words-datalist"></datalist>
         <button type="button" id="shuffle-words">Shuffle</button>
       </div>
       <div class="spacing-separator"></div>
@@ -151,8 +157,16 @@
       </svg>
     </div>
 
+    <!-- Color picker -->
     <script
       src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js">
+    </script>
+    <!-- Datalist customizer -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.7/awesomplete.min.js"
+      integrity="sha512-Pc3/aEr2FIVZhHxe0RAC9SFrd+pxBJHN3pNJfJNTKc2XAFnXUjgQGIh6X935ePSXNMN6rFa3yftxSnZfJE8ZAg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
     </script>
 
     <script src="wordlist.js"></script>
