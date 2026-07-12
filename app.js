@@ -319,6 +319,11 @@ class Puzzle {
     }
 }
 
+// TODO: Separate the wordlist input creation process into a function.
+// (see:
+//   createWordCallbackFunction > Add an element,
+//   PUZZLE INITIAL VALUES > Update the inputs to match the restored word list)
+
 /* Create a callback for editing a word in the word list. */
 function createWordCallbackFunction(puzzle) {
 
