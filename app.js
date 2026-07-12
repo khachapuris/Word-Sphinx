@@ -55,6 +55,7 @@ let documentSizeStored = localStorage.getItem('documentSize');
 if (documentSizeStored !== null) {
     documentSize = documentSizeStored;
 }
+allWords = allWords.filter(word => word.length == wordLength);
 
 // Assign page-orientation dependent values for easier use in calculations
 let marginTop = marginOutside;
@@ -328,7 +329,7 @@ function createWordCallbackFunction(puzzle) {
             .substring(3));
         const input = document.querySelector(`#word-list input.row${i}`);
         const wordNumber = wordList.length;
-        if (i == wordNumber) {
+        if (i == wordNumber && input.value.length == wordLength) {
             // Add an element
             wordList.push(input.value);
             puzzle.rebuildPuzzleContents();
@@ -358,7 +359,7 @@ function createWordCallbackFunction(puzzle) {
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
             puzzle.setLetterColor();
-        } else {
+        } else if (input.value.length == wordLength) {
             // Change an element
             wordList[i] = input.value;
             puzzle.updatePuzzleWords();
