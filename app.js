@@ -319,10 +319,27 @@ class Puzzle {
     }
 }
 
-// TODO: Separate the wordlist input creation process into a function.
-// (see:
-//   createWordCallbackFunction > Add an element,
-//   PUZZLE INITIAL VALUES > Update the inputs to match the restored word list)
+/* Create and return an input for the word list dialog */
+function createWordInput(i) {
+    const li = document.createElement('li');
+    const input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.setAttribute('list', `datalist-${i}`);
+    input.setAttribute('autocomplete', 'off');
+    input.classList.add(`row${i}`);
+    input.classList.add('awesomecomplete');
+    document.getElementById('word-list').appendChild(li);
+    li.appendChild(input);
+    // Provide autocompletion options for the word list inputs
+    const awesomplete = new Awesomplete(input, {
+        list: allWords,
+        minChars: 1,
+        maxItems: allWords.length,
+    });
+    awesomplete.list = allWords;
+    // Return the created input element
+    return input;
+}
 
 /* Create a callback for editing a word in the word list. */
 function createWordCallbackFunction(puzzle) {
@@ -340,18 +357,11 @@ function createWordCallbackFunction(puzzle) {
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
             puzzle.setLetterColor();
-            const newLi = document.createElement('li');
-            const newInput = document.createElement('input');
-            newInput.setAttribute('type', 'text');
-            newInput.setAttribute('list', 'words-datalist');
-            newInput.classList.add(`row${i + 1}`);
+            const newInput = createWordInput(i + 1);
             newInput.addEventListener('change', callback);
-            document.getElementById('word-list').appendChild(newLi);
-            newLi.appendChild(newInput);
         } else if (i < wordNumber && input.value.length < 1) {
             // Remove an element
             wordList.splice(i, 1);
-            console.log(wordList);
             document.querySelector(`#word-list li:has(input.row${i})`)
                 .remove();
             // Shift all list item indices after the removed element one down
@@ -372,6 +382,7 @@ function createWordCallbackFunction(puzzle) {
         localStorage.setItem('wordList', JSON.stringify(wordList));
     }
 
+    console.log(wordList);
     return callback;
 }
 
@@ -412,25 +423,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update the inputs to match the restored word list
     const wordListElement = document.getElementById('word-list');
     for (let i = 0; i <= wordList.length; i++) {
-        const li = document.createElement('li');
-        const input = document.createElement('input');
-        input.setAttribute('type', 'text');
-        input.setAttribute('list', `datalist-${i}`);
-        input.setAttribute('autocomplete', 'off');
-        input.classList.add(`row${i}`);
-        input.classList.add('awesomecomplete');
-        wordListElement.appendChild(li);
-        li.appendChild(input);
+        const input = createWordInput(i);
         if (i < wordList.length) {
             input.value = wordList[i];
         }
-        // Provide autocompletion options for the word list inputs
-        const awesomplete = new Awesomplete(input, {
-            list: allWords,
-            minChars: 1,
-            maxItems: allWords.length,
-        });
-        awesomplete.list = allWords;
     }
     console.log(wordList);
     // Update page dimensions
