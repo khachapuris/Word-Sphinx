@@ -70,6 +70,9 @@ if (insideIsLeft) {
     marginRight = marginInside;
 }
 
+// Unset global variables
+let awesompleteList = [];
+
 // ------ UTILITY FUNCTIONS -----
 /* Shuffle an array randomly. */
 function shuffle(array) {
@@ -337,6 +340,7 @@ function createWordInput(i) {
         maxItems: allWords.length,
     });
     awesomplete.list = allWords;
+    awesompleteList[i] = awesomplete;
     // Return the created input element
     return input;
 }
@@ -359,11 +363,14 @@ function createWordCallbackFunction(puzzle) {
             puzzle.setLetterColor();
             const newInput = createWordInput(i + 1);
             newInput.addEventListener('change', callback);
+            // Focus the next input
+            document.querySelector(`#word-list input.row${i + 1}`).focus();
         } else if (i < wordNumber && input.value.length < 1) {
             // Remove an element
             wordList.splice(i, 1);
             document.querySelector(`#word-list li:has(input.row${i})`)
                 .remove();
+            awesompleteList[i].destroy();
             // Shift all list item indices after the removed element one down
             for (let shift = i + 1; shift <= wordNumber; shift++) {
                 const shiftInput = document.querySelector(
@@ -374,15 +381,19 @@ function createWordCallbackFunction(puzzle) {
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
             puzzle.setLetterColor();
+            // Focus the previous input
+            document.querySelector(`#word-list input.row${i - 1}`).focus();
         } else if (input.value.length == wordLength) {
             // Change an element
             wordList[i] = input.value;
             puzzle.updatePuzzleWords();
+            // Focus the next input
+            document.querySelector(`#word-list input.row${i + 1}`).focus();
         }
+        console.log(wordList);
         localStorage.setItem('wordList', JSON.stringify(wordList));
     }
 
-    console.log(wordList);
     return callback;
 }
 
@@ -421,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bgColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     letterColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     // Update the inputs to match the restored word list
-    const wordListElement = document.getElementById('word-list');
     for (let i = 0; i <= wordList.length; i++) {
         const input = createWordInput(i);
         if (i < wordList.length) {
@@ -485,20 +495,31 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.updatePuzzleWords();
         localStorage.setItem('wordList', JSON.stringify(wordList));
     });
+    // Update the puzzle & close popup when picking an autocomplete option
+    document.addEventListener('awesomplete-selectcomplete', (selectEvent) => {
+        console.log(selectEvent);
+        console.log(awesompleteList);
+        // Get the current index of the element
+        const i = parseInt(Array.from(selectEvent.target.classList)
+            .find(className => className.startsWith('row'))
+            .substring(3));
+        awesompleteList[i].close();
+        selectEvent.target.dispatchEvent(new Event('change'));
+    });
 
     // ------ RESPONSIVE DESIGN -----
     smallScreens.addEventListener('change', () => {
-        adjustPreviewScale()
+        adjustPreviewScale();
         preview.updateDocumentSize();
         preview.updatePageMargins();
         preview.updatePuzzleGeometry();
     });
     tinyScreens.addEventListener('change', () => {
-        adjustPreviewScale()
+        adjustPreviewScale();
         preview.updateDocumentSize();
         preview.updatePageMargins();
         preview.updatePuzzleGeometry();
-    })
+    });
 
     // ----- DOWNLOAD SVG IMAGE -----
     document.getElementById('download').addEventListener('click', () => {
