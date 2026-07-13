@@ -91,7 +91,7 @@ input[data-coloris] {
 
 #word-list input {
     width: 100px;
-    height: 30px;
+    height: 32px;
     margin: 0;
     margin-left: -5px;
     font-size: 20px;
@@ -106,7 +106,7 @@ input[data-coloris] {
 
 #word-list input:focus {
     outline: none;
-    border: 1px solid #8888ff;
+    border: 1px solid SelectedItem;
 }
 
 .awesomplete > ul {
