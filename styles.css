@@ -100,6 +100,14 @@ input[data-coloris] {
     padding-left: 5px;
 }
 
+#word-list input.invalid {
+    color: red;
+}
+
+#word-list input.invalid:focus {
+    color: inherit;
+}
+
 #word-list input:hover {
     border: 1px solid #ddd;
 }

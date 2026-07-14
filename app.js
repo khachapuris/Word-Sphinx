@@ -355,7 +355,7 @@ function createWordCallbackFunction(puzzle) {
             .substring(3));
         const input = document.querySelector(`#word-list input.row${i}`);
         const wordNumber = wordList.length;
-        if (i == wordNumber && input.value.length == wordLength) {
+        if (i == wordNumber && allWords.includes(input.value)) {
             // Add an element
             wordList.push(input.value);
             puzzle.rebuildPuzzleContents();
@@ -363,9 +363,11 @@ function createWordCallbackFunction(puzzle) {
             puzzle.setLetterColor();
             const newInput = createWordInput(i + 1);
             newInput.addEventListener('change', callback);
+            // Present the input as valid
+            input.classList.remove('invalid');
             // Focus the next input
             document.querySelector(`#word-list input.row${i + 1}`).focus();
-        } else if (i < wordNumber && input.value.length < 1) {
+        } else if (i < wordNumber && input.value.length === 0) {
             // Remove an element
             wordList.splice(i, 1);
             document.querySelector(`#word-list li:has(input.row${i})`)
@@ -381,14 +383,21 @@ function createWordCallbackFunction(puzzle) {
             puzzle.rebuildPuzzleContents();
             puzzle.updatePuzzleGeometry();
             puzzle.setLetterColor();
+            // Present the input as valid
+            input.classList.remove('invalid');
             // Focus the previous input
             document.querySelector(`#word-list input.row${i - 1}`).focus();
-        } else if (input.value.length == wordLength) {
+        } else if (allWords.includes(input.value)) {
             // Change an element
             wordList[i] = input.value;
             puzzle.updatePuzzleWords();
+            // Present the input as valid
+            input.classList.remove('invalid');
             // Focus the next input
-            document.querySelector(`#word-list input.row${i + 1}`).focus();
+            // document.querySelector(`#word-list input.row${i + 1}`).focus();
+        } else {
+            // Present the input as invalid
+            input.classList.add('invalid');
         }
         console.log(wordList);
         localStorage.setItem('wordList', JSON.stringify(wordList));
@@ -491,6 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < wordList.length; i++) {
             const input = document.querySelector(`#word-list input.row${i}`);
             input.value = wordList[i];
+            input.classList.remove('invalid');
         }
         preview.updatePuzzleWords();
         localStorage.setItem('wordList', JSON.stringify(wordList));
@@ -505,6 +515,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .substring(3));
         awesompleteList[i].close();
         selectEvent.target.dispatchEvent(new Event('change'));
+    });
+    // Select all text when an input is focused
+    document.querySelectorAll('#word-list input').forEach(input => {
+        input.addEventListener('focus', () => input.select());
     });
 
     // ------ RESPONSIVE DESIGN -----
