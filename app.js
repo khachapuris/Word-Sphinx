@@ -39,11 +39,11 @@ if (wordListStored !== null) {
     wordList = JSON.parse(wordListStored);
 }
 let bgColorStored = localStorage.getItem('bgColor');
-if (bgColor !== null) {
+if (bgColorStored !== null) {
     bgColor = bgColorStored;
 }
 let letterColorStored = localStorage.getItem('letterColor');
-if (letterColor !== null) {
+if (letterColorStored !== null) {
     letterColor = letterColorStored;
 }
 let documentSizeStored = localStorage.getItem('documentSize');
