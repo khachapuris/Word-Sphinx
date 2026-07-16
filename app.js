@@ -1,8 +1,3 @@
-// ------ SYSTEM PARAMETERS -----
-// NOTE: Replace this with the global path so the pictures in the downloaded
-// document would be rendered correctly
-const pathToPictures = 'pictures'
-
 // ------ PUZZLE PARAMETERS -----
 // Scale shows the amount of pixels displayed for each inch
 let previewScale = 60;
