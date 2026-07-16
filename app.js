@@ -341,6 +341,8 @@ function createWordInput(i) {
     });
     awesomplete.list = allWords;
     awesompleteList[i] = awesomplete;
+    // Select all text when an input is focused
+    input.addEventListener('focus', () => input.select());
     // Return the created input element
     return input;
 }
@@ -515,10 +517,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .substring(3));
         awesompleteList[i].close();
         selectEvent.target.dispatchEvent(new Event('change'));
-    });
-    // Select all text when an input is focused
-    document.querySelectorAll('#word-list input').forEach(input => {
-        input.addEventListener('focus', () => input.select());
     });
 
     // ------ RESPONSIVE DESIGN -----
