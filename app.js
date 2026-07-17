@@ -28,7 +28,12 @@ let wordLength = 3;
 // These values are boolean
 let insideIsLeft = true;
 // These variables represent default values of data saved between sessions
-let wordList = ['cat', 'hat', 'rat', 'bat'];
+let wordListFallback = {
+    3: ['cat', 'hat', 'rat', 'bat'],
+    4: ['flag', 'sled', 'glad'],
+};
+let wordList = wordListFallback[wordLength];
+console.log(wordList);
 let bgColor = '#ffffff';
 let letterColor = '#808080';
 let documentSize = '8.27x11.69';
@@ -252,14 +257,15 @@ class Puzzle {
 
     /* Set the background color of the puzzle to the given color. */
     setBackgroundColor() {
-        this.page.style.setProperty('--bg-color', bgColor);
+        document.documentElement.style.setProperty('--bg-color', bgColor);
         this.page.querySelector('.background-fill')
             .setAttribute('fill', bgColor);
     }
 
     /* Set the color of pre-filled letters in the puzzle to the given color. */
     setLetterColor() {
-        this.page.style.setProperty('--letter-color', letterColor);
+        document.documentElement.style.setProperty(
+            '--letter-color', letterColor);
         this.page.querySelectorAll('.letter').forEach(letter => {
             letter.setAttribute('fill', letterColor);
         })

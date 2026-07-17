@@ -58,7 +58,7 @@ aside {
     flex-grow: 1;
 }
 
-label {
+aside>div>label {
     display: block;
     padding-bottom: 5px;
 }
@@ -83,6 +83,40 @@ input[data-coloris] {
     width: 60px;
     height: 50px;
     cursor: pointer;
+}
+
+.letter-to-hide-checkbox {
+    margin-left: 5px;
+}
+
+.letter-to-hide-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.letter-to-hide-checkbox label {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 2px solid #333333;
+    border-radius: 50%;
+    color: var(--letter-color);
+    font-family: "Short Stack";
+    font-weight: bold;
+    font-size: 28px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 38px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.letter-to-hide-checkbox label:hover {
+    background-color: #ddd;
+}
+
+.letter-to-hide-checkbox input[type="checkbox"]:checked+label {
+    font-size: 0px;
 }
 
 #word-list li {
