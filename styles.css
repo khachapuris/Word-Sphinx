@@ -85,15 +85,15 @@ input[data-coloris] {
     cursor: pointer;
 }
 
-.letter-to-hide-checkbox {
+#skip-letters-checkbox {
     margin-left: 5px;
 }
 
-.letter-to-hide-checkbox input[type="checkbox"] {
+#skip-letters-checkbox input[type="checkbox"] {
     display: none;
 }
 
-.letter-to-hide-checkbox label {
+#skip-letters-checkbox label {
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -111,11 +111,11 @@ input[data-coloris] {
     cursor: pointer;
 }
 
-.letter-to-hide-checkbox label:hover {
+#skip-letters-checkbox label:hover {
     background-color: #ddd;
 }
 
-.letter-to-hide-checkbox input[type="checkbox"]:checked+label {
+#skip-letters-checkbox input[type="checkbox"]:checked+label {
     font-size: 0px;
 }
 

@@ -36,6 +36,8 @@ let wordList = wordListFallback[wordLength];
 let bgColor = '#ffffff';
 let letterColor = '#808080';
 let documentSize = '8.27x11.69';
+let hiddenLetters = [true]; // by default, only the first letter is hidden
+for (let i = 1; i < wordLength; i++) { hiddenLetters.push(false); }
 
 // ----- RESTORE CACHED DATA ----
 // Filter down available words to words of the selected length
@@ -93,9 +95,17 @@ function shuffle(array) {
   }
 }
 
-/* Replace the first character of the given word with a space. */
+/* Replace the hidden characters in the given word with a space. */
 function hideLetter(word) {
-    return word.replace(/^./, ' ');
+    let ans = '';
+    for (let i = 0; i < wordLength; i++) {
+        if (hiddenLetters[i]) {
+            ans += ' ';
+        } else {
+            ans += word[i];
+        }
+    }
+    return ans;
 }
 
 /* Transform a number into a string that ends with 'px'. */
@@ -453,6 +463,11 @@ document.addEventListener('DOMContentLoaded', () => {
     letterColorInput.value = letterColor;
     bgColorInput.dispatchEvent(new Event('input', { bubbles: true }));
     letterColorInput.dispatchEvent(new Event('input', { bubbles: true }));
+    // Update the hidden letters input
+    for (let i = 0; i < wordLength; i++) {
+        const input = document.querySelector(`.skip-letter.col${i}`);
+        input.checked = hiddenLetters[i];
+    }
     // Update the inputs to match the restored word list
     for (let i = 0; i <= wordList.length; i++) {
         const input = createWordInput(i);
@@ -502,6 +517,18 @@ document.addEventListener('DOMContentLoaded', () => {
         preview.updatePuzzleGeometry();
         localStorage.setItem('documentSize', documentSize);
     })
+    // Change the hidden letters when the respective input is toggled
+    document.querySelectorAll('#skip-letters-checkbox input[type="checkbox"]')
+        .forEach(input => {
+            input.addEventListener('change', () => {
+                // Get the index of the input
+                const i = parseInt(Array.from(input.classList)
+                    .find(className => className.startsWith('col'))
+                    .substring(3));
+                hiddenLetters[i] = input.checked;
+                preview.updatePuzzleWords();
+            })
+        });
     // Edit the word list interactively
     for (let i = 0; i <= wordList.length; i++) {
         const input = document.querySelector(`#word-list input.row${i}`);
