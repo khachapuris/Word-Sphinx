@@ -33,29 +33,37 @@ let wordListFallback = {
     4: ['flag', 'sled', 'glad'],
 };
 let wordList = wordListFallback[wordLength];
-console.log(wordList);
 let bgColor = '#ffffff';
 let letterColor = '#808080';
 let documentSize = '8.27x11.69';
 
 // ----- RESTORE CACHED DATA ----
+// Filter down available words to words of the selected length
+allWords = allWords.filter(word => word.length == wordLength);
+// Restore the word list
 let wordListStored = localStorage.getItem('wordList');
 if (wordListStored !== null) {
     wordList = JSON.parse(wordListStored);
+    wordList = wordList.filter(word => allWords.includes(word));
+    if (wordList.length === 0) {
+        wordList = wordListFallback[wordLength];
+    }
 }
+// Restore the background color
 let bgColorStored = localStorage.getItem('bgColor');
 if (bgColorStored !== null) {
     bgColor = bgColorStored;
 }
+// Restore the letter color
 let letterColorStored = localStorage.getItem('letterColor');
 if (letterColorStored !== null) {
     letterColor = letterColorStored;
 }
+// Restore the document dimensions
 let documentSizeStored = localStorage.getItem('documentSize');
 if (documentSizeStored !== null) {
     documentSize = documentSizeStored;
 }
-allWords = allWords.filter(word => word.length == wordLength);
 
 // Assign page-orientation dependent values for easier use in calculations
 let marginTop = marginOutside;
@@ -389,7 +397,9 @@ function createWordCallbackFunction(puzzle) {
             // Present the input as valid
             input.classList.remove('invalid');
             // Focus the previous input
-            document.querySelector(`#word-list input.row${i - 1}`).focus();
+            if (i > 0) {
+                document.querySelector(`#word-list input.row${i - 1}`).focus();
+            }
         } else if (allWords.includes(input.value)) {
             // Change an element
             wordList[i] = input.value;
