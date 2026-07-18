@@ -51,6 +51,11 @@ if (wordListStored !== null) {
         wordList = wordListFallback[wordLength];
     }
 }
+// Restore the letters to skip
+let hiddenLettersStored = localStorage.getItem('hiddenLetters');
+if (hiddenLettersStored !== null) {
+    hiddenLetters = JSON.parse(hiddenLettersStored);
+}
 // Restore the background color
 let bgColorStored = localStorage.getItem('bgColor');
 if (bgColorStored !== null) {
@@ -527,7 +532,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     .substring(3));
                 hiddenLetters[i] = input.checked;
                 preview.updatePuzzleWords();
-            })
+                localStorage.setItem('hiddenLetters',
+                    JSON.stringify(hiddenLetters));
+            });
         });
     // Edit the word list interactively
     for (let i = 0; i <= wordList.length; i++) {
