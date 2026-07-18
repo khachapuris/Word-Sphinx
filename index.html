@@ -54,8 +54,9 @@
       </div>
       <div class="input-group bg-color">
         <label for="bg-color">
-          <span class="large-screens-only">Change the background color</span>
-          <span class="small-screens-only">Change background</span>
+          Change
+          <span class="small-screens-only"><br></span>
+          background
         </label>
         <input
           name="bg-color"
@@ -66,10 +67,9 @@
       </div>
       <div class="input-group letter-color">
         <label for="letter-color">
-          <span class="large-screens-only">
-            Change the color of the letters
-          </span>
-          <span class="small-screens-only">Change letter&nbsp;color</span>
+          Change
+          <span class="small-screens-only"><br></span>
+          letter&nbsp;color
         </label>
         <input
           name="letter-color"
@@ -79,7 +79,11 @@
           data-coloris>
       </div>
       <div class="input-group skip-letters">
-        <label>Choose the letters to hide</label>
+        <label>
+          <span class="large-screens-only">Choose
+            l</span><span class="small-screens-only">L</span>etters
+          to show
+        </label>
         <div id="skip-letters-checkbox">
           <input
             type="checkbox"
@@ -105,7 +109,7 @@
         </div>
       </div>
       <div class="input-group word-list">
-        <label>Edit the word list</label>
+        <div class="large-screens-only"><label>Edit the word list</label></div>
         <ul id="word-list"></ul>
         <button type="button" id="shuffle-words">Shuffle</button>
       </div>

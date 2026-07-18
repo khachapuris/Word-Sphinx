@@ -487,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const [selectedWidth, selectedHeight] = selectedValue;
     documentWidth = parseFloat(selectedWidth);
     documentHeight = parseFloat(selectedHeight);
+    adjustPreviewScale();
     preview.setBackgroundColor();
     preview.updateDocumentSize();
     preview.updatePageMargins();

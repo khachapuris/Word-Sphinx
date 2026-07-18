@@ -248,17 +248,21 @@ main {
         flex-direction: column;
         flex-wrap: nowrap;
     }
+    header {
+        order: 1;
+    }
     aside {
+        order: 3;
         width: 100vw;
         height: unset;
         border-right: none;
-        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
         gap: 20px;
         display: grid;
         grid-template-rows: min-content 1fr min-content;
         grid-template-columns: min-content min-content 1fr 2fr;
         grid-template-areas: 
-            "dimensions dimensions dimensions words"
+            "dimensions dimensions dimensions skip-letters"
             "bg-color letter-color . words"
             "download download download words";
     }
@@ -269,15 +273,22 @@ main {
     .input-group.bg-color { grid-area: bg-color; }
     .input-group.letter-color { grid-area: letter-color; }
     .input-group.download { grid-area: download; }
+    .input-group.skip-letters {
+        grid-area: skip-letters;
+    }
+    #skip-letters-checkbox label {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        line-height: 30px;
+        margin: 0;
+    }
     .input-group.word-list {
         grid-area: words;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-    .input-group.word-list label {
-        display: none;
     }
     #word-list {
         margin-top: 0;
@@ -292,6 +303,7 @@ main {
         display: none;
     }
     main {
+        order: 2;
         height: 100%;
         width: 100vw;
     }
@@ -306,12 +318,14 @@ main {
     }
     aside {
         padding: 20px 4%;
-        grid-template-rows: min-content 1fr min-content;
-        grid-template-columns: min-content min-content 1fr;
+        grid-template-rows: min-content min-content min-content 1fr min-content;
+        grid-template-columns: auto;
         grid-template-areas: 
-            "dimensions dimensions words"
-            "bg-color letter-color words"
-            "download download words";
+            "dimensions dimensions"
+            "bg-color skip-letters"
+            "bg-color words"
+            "letter-color words"
+            "download words";
     }
     #word-list {
         padding-left: 24px;
