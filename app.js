@@ -139,10 +139,10 @@ class Puzzle {
     updateDocumentSize() {
         const pageSVG = this.page.querySelector('.svg');
         const backgroundFill = this.page.querySelector('.background-fill');
-        this.page.style.width = appendPx(documentWidth * this.scale + 2);
-        this.page.style.height = appendPx(documentHeight * this.scale + 2);
-        pageSVG.style.width = appendPx(documentWidth * this.scale);
-        pageSVG.style.height = appendPx(documentHeight * this.scale);
+        this.page.style.width = appendPx(Math.round(documentWidth * this.scale + 2));
+        this.page.style.height = appendPx(Math.round(documentHeight * this.scale + 2));
+        pageSVG.style.width = appendPx(Math.round(documentWidth * this.scale));
+        pageSVG.style.height = appendPx(Math.round(documentHeight * this.scale));
         pageSVG.setAttribute('width', documentWidth * this.scale);
         pageSVG.setAttribute('height', documentHeight * this.scale);
         backgroundFill.setAttribute('width', documentWidth * this.scale);
