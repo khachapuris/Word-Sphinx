@@ -3,10 +3,10 @@
 
 :root {
     --bg-color: white;
-    --border-color: color-mix(in srgb, var(--bg-color) 67%, gray 33%);
-    --shadow-color: color-mix(in srgb, var(--border-color) 50%, white 50%);
-    --deep-shadow: color-mix(in srgb, var(--bg-color) 50%, black 50%);
     --letter-color: gray;
+    --header-height: 60px;
+    --sidebar-width: 300px;
+    --pane-margin: 10px;
 }
 
 * {
@@ -17,43 +17,44 @@
 
 body {
     margin: 0;
+    padding: calc(var(--pane-margin) / 2);
     height: 100vh;
     display: flex;
     flex-wrap: wrap;
 }
 
 body>* {
-    margin: 10px;
+    margin: calc(var(--pane-margin) / 2);
     background-color: white;
     box-shadow:
         0  3px  1px -2px #ddd,
         0 10px 10px -2px #ddd,
         0 10px 30px -2px #ddd;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 h1,h1 * {
     font-family: 'Short Stack';
     font-size: 30px;
     overflow: hidden;
+    color: white;
 }
 
 header {
-    height: 60px;
-    min-height: 60px;
-    width: 100vw;
+    height: var(--header-height);
+    min-height: var(--header-height);
+    width: calc(100vw - calc(var(--pane-margin) * 2));
     display: flex;
     align-items: center;
     justify-content: center;
     border-bottom: 1px solid #ddd;
-    background-color: #fff7b1;
+    background-color: oklch(0.7 0.1245 67.81);
 }
 
 aside {
-    width: 300px;
-    /* border-right: 1px solid #ddd; */
+    width: var(--sidebar-width);
     padding: 20px;
-    height: calc(100% - 100px);
+    height: calc(calc(100vh - var(--header-height)) - calc(var(--pane-margin) * 3));
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -192,8 +193,8 @@ button:hover {
 }
 
 main {
-    width: calc(100vw - 340px);
-    height: calc(100% - 100px);
+    width: calc(calc(100vw - var(--sidebar-width)) - calc(var(--pane-margin) * 3));
+    height: calc(calc(100vh - var(--header-height)) - calc(var(--pane-margin) * 3));
 }
 
 .main-content {
@@ -209,7 +210,7 @@ main {
 #current-page {
     width: 422px;
     height: 596px;
-    border: 1px solid var(--border-color);
+    border: 1px solid color-mix(in oklch, var(--bg-color) 67%, gray 33%);
     box-shadow:
         0 1px  1px -2px oklch(from var(--bg-color) calc(l / 1.5) calc(c / 3) h),
         0 3px 10px -2px oklch(from var(--bg-color) calc(l / 1.5) calc(c / 2) h),
@@ -269,11 +270,11 @@ main {
     }
     header {
         order: 1;
-        width: calc(100vw - 20px);
+        width: calc(100vw - calc(var(--pane-margin) * 2));
     }
     aside {
         order: 3;
-        width: calc(100vw - 20px);
+        width: calc(100vw - calc(var(--pane-margin) * 2));
         height: unset;
         border-right: none;
         border-top: 1px solid #ddd;
@@ -325,7 +326,7 @@ main {
     main {
         order: 2;
         height: 100%;
-        width: calc(100vw - 20px);
+        width: calc(100vw - calc(var(--pane-margin) * 2));
     }
 }
 
