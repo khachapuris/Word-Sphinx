@@ -423,6 +423,8 @@ function createWordCallbackFunction(puzzle) {
             input.classList.remove('invalid');
             // Focus the next input
             // document.querySelector(`#word-list input.row${i + 1}`).focus();
+            // Close the local autocomplete list
+            awesompleteList[i].close();
         } else {
             // Present the input as invalid
             input.classList.add('invalid');
