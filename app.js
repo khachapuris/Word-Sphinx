@@ -3,7 +3,7 @@
 let previewScale = 60;
 let smallScreensPreviewScale = 40;
 let tinyScreensPreviewScale = 26;
-let downloadScale = 600;
+let downloadScale = 96;
 // The following values are in inches
 let documentWidth = 8.27;
 let documentHeight = 11.69;
