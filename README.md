@@ -5,6 +5,9 @@ It provides various controls and options for the layout, contents, and
 styling of the activity sheet, and allows you to download the resulting work
 in a printable format.
 
+<img width="1920" height="1080" alt="a screenshot of the application"
+src="https://github.com/user-attachments/assets/637bbbea-9c1a-4761-8485-606ff7929801" />
+
 ## Installation
 
 To install and run the software from your computer, follow these steps:
