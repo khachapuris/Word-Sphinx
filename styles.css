@@ -193,8 +193,8 @@ button:hover {
 }
 
 main {
-    width: calc(calc(100vw - var(--sidebar-width)) - calc(var(--pane-margin) * 3));
-    height: calc(calc(100vh - var(--header-height)) - calc(var(--pane-margin) * 3));
+    width: calc(calc(100% - var(--sidebar-width)) - calc(var(--pane-margin) * 2));
+    height: calc(calc(100% - var(--header-height)) - calc(var(--pane-margin) * 2));
 }
 
 .main-content {
