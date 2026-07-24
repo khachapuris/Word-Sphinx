@@ -19,9 +19,10 @@ To install and run the software from your computer, follow these steps:
 
 ## Setup
 
-Word Sphinx is designed to create activity sheets using images *you* provide.
-You can start with a minimal set of pictures (e.g. 4) and add more as you need
-them. Begin with the following steps:
+Currently, Word Sphinx does not include any default images, so you will need
+to provide it with your own set of pictures. You can start with a minimal
+amount (e.g. 4), and continue adding more as you need them. To begin, go
+through the following steps:
 
 1. Create a directory called `pictures` in the base folder
 2. Paste your pictures in PNG format into the created directory
