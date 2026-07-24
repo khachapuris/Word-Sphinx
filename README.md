@@ -19,20 +19,21 @@ To install and run the software from your computer, follow these steps:
 
 ## Setup
 
-As the program distribution does not include any images, you must provide it
-with your own set of pictures. To do this, go through the following steps:
+Word Sphinx is designed to create activity sheets using images *you* provide.
+You can start with a minimal set of pictures (e.g. 4) and add more as you need
+them. Begin with the following steps:
 
 1. Create a directory called `pictures` in the base folder
 2. Paste your pictures in PNG format into the created directory
     - Note that the application works best with
     square images on a transparent background
     - Name each image like this: `{word}.png`,
-    where `{word}` is the name that will be used in the puzzles
-3. Go back with `cd ..`
-4. Create a file called `wordlist.js` and update it
-with all the pictures you added:
+    where `{word}` is the word that will be used in the puzzles
+3. Go back to the base directory
+4. Create a file called `wordlist.js` and update it with all the pictures
+you added:
     - Manually:
-    ```
+    ```js
     pathToPictures = "{full-path-to-the-pictures-folder}";
     allWords = ["{word1}", "{word2}", "{word3}"]
     ```
@@ -42,10 +43,18 @@ with all the pictures you added:
     ls pictures | sed 's/^\(.*\)\.png$/    "\1",/; 1s/^/allWords = [\n/; $s/$/\n]/' >> wordlist.js
     ```
 
-After you're done, open `index.html` in your browser.
+After you open (reload) `index.html` in your browser and type one of the new
+words into the field, the word and respective picture will appear in the
+preview. If the image renders too high/low, ensure the image is square and
+centered; if it is too big/small, consider enlarging/shrinking the transparent
+margins.
+
+Whenever you decide to add more images, put them into the `pictures` folder.
+Do not forget add the corresponding words to `wordlist.js` (either manually,
+or rerun the bash script above).
 
 ## Usage
 
-To create an activity sheet, simply adjust the parameters on the webpage; your
-editing will be accompanied by a real-time preview of the ready puzzle. When
-you are finished, click `Download > as SVG` to download the work.
+To create an activity sheet, adjust the parameters on the webpage; your
+editing will be accompanied by a real-time preview of the ready puzzle.
+When you are finished, click `Download > as SVG` to download the work.
